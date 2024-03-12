@@ -1,0 +1,1307 @@
+https://github.com/sainathatheli/6A406
+
+
+
+
+What is a Database?
+
+A Data Base is an Organized Collection of Data which can be easily
+accessed, managed and updated.
+In today’s World, Data plays a vital role in every business. In our day to day life, we see or
+interact with many applications and Software’s, every application that we see or work with will
+have two parts:
+
+1. GUI (Graphical User Interface / Front end)
+2. Database
+
+To keep it simple GUI is the part where user interacts with (like Facebook applications – look
+and feel) and the Data that we see in the application (like Facebook profile, messages, images
+and videos) are pulled from Database.
+
+
+End User who interacts with the application may not know how the data is being fetched and
+where so much of information is stored. Internally all the dynamic content that we see in the
+application is fetched from Database.
+
+Database and all its components should be designed and configured at the time of application
+development. Once the application is developed we will not be able to make changes to the
+database structure as every change will hugely affect the business application GUI code.
+It is very important to make sure that data is securely maintained and accurately stored. 
+
+So to maintain security and accuracy in database a set of rules / software system is defined and that
+we call it as DBMS (Data Base Management System – which performs all the operations on the
+database)
+
+What is DBMS?
+
+DBMS (Database Management System) is a software tool that is used to store and manage data
+in the Database.
+
+A database management system contains a set of programs that control the creation,
+maintenance, and use of a database. Like:
+
+Adding new data to the table.
+Modifying existing data.
+Deleting unwanted data.
+
+DBMS allows different user application programs to concurrently access the same database.
+Before Database and DBMS were introduced, traditional approach was to store data in flat files
+(physical files in system) but there were some disadvantages with it.
+
+What is RDBMS?
+A relational database management system (RDBMS) is a Database Management System
+(DBMS) that is based on the relational model introduced by E. F. Codd and most popular 
+databases currently in use are based on the relational database model. To put in different 
+words RDBMS is built on top of in which data is stored in tables and the relationships among 
+the data are maintained. The data stored in a table is organized into rows and columns. Each 
+row in a table represents an individual record and each column represents a field. A record is 
+an individual entry in the database.
+
+Difference between DBMS and RDBMS
+----------------------------------
+For example, consider the database which stores employee information. 
+In DBMS, all details like empno, ename, job, salary, deptno, dname, location, street, city, state, phone will 
+be stored in a single table. 
+
+But in RDBMS, the data model will be designed in such a way that 
+like the empno, ename, job, salary and deptno will be stored in emp table and deptno, dname, location will be stored in dept table and location, street, city, state, phone will be stored under locations table. 
+
+Any information to be obtained is done by properly relating the ‘emp’, ‘dept’ 
+and ‘locations’ tables.
+
+
+
+MYSQL:
+======-------
+
+Sql is classified into 
+
+DDL
+===
+Data definition Language 
+
+DDl is used to specify the structure or schema for Objects
+
+cmds are : create,truncate,alter,rename,drop
+
+DML
+===
+Data manipulation Language
+
+DMl is used to perform insert or update or delete a record from database Object(table)
+
+commands are :- insert,update,delete
+
+
+DRl(Data retrevial language)
+ or DQL(Data query language)
+============================
+
+Drl is used t retrieve the data from the table
+
+command:
+=======
+
+select
+
+
+
+DDL:
+====
+
+create command is used to specify the structure for Objects(database,table,view,procedure,function...etc)
+
+
+Step1:
+======
+if you want to create any objects in mysql we need to use database.
+
+
+1)createing a database:
+
+syntax:
+=======
+
+create database <specify database name>
+
+ex:
+===
+
+create a database named as cts.
+
+sol:
+====
+
+create database cts;
+
+
+to list all the database:
+=========================
+
+cmd is :‑‑‑
+
+show databases;
+
+
+
+to create any objects(database,table,view,procedure,function...etc)
+ in database first we need to use the database:
+====================================================================
+
+cmd:
+-----
+
+use database;
+
+ex:
+----
+
+use cts;
+
+
+to check current your are in which database:
+=============================================
+
+cmd:
+----
+
+select database();
+
+
+
+creating a table:
+=================
+syntax:
+=======
+
+creat table  [if not exists] tableName  (
+                                         col1 datatype,
+                                            col2 dataetype,
+                                                 col3 datatype,,,,,,,,,coln datatype);
+
+ex:
+===
+tablename: employee
+
+columnsName    datatype   size
+
+empno	      int         4
+ename	      varchar     20
+sal           decimal     10,2   -->738.30
+
+
+sol:
+====
+
+create table employee(empno int(4),ename varchar(20),sal decimal(10,2));
+
+
+to list all the tables from database:
+=====================================
+cmd:
+----
+
+show tables;
+
+
+to describe the structure of the table:
+=======================================
+
+syntax:
+-------
+
+describe  tablename;
+
+ex:
+---
+
+describe employee;
+
+
+Once the table is created we need to insert data(record) into 
+table for all columns using insert command
+====================================================
+
+syntax:
+-------
+
+insert into tablename values(value1,value2.....,valuen);
+
+ex:
+===
+
+insert five records into table employee
+
+sol:
+----
+
+insert into employee values(101,'smith',3000);
+
+insert into employee values(103,'scott',4000);
+
+insert into employee values(104,'martin',2000);
+
+insert into employee values(102,'john',5000);
+
+insert into employee values(105,'raju',3000);
+
+
+to list the data or records from the table:
+===========================================
+
+syntax:
+=======
+
+select * from tablename;
+
+ex:
+===
+
+select * from employee;
+
+
+
+alter:
+======
+
+alter command is used to modifiy or alter the structure of the table.
+
+a) using alter add a new column
+-------------------------------
+syntax:
+-------
+
+alter table tablename add columnName datatype;
+
+
+ex:
+---
+Add column name is job to existing table employee.
+
+sol:
+====
+
+alter table employee add job varchar(20);
+
+
+ex2:
+===
+
+add mutiple columns address,mobilno columns to employee;
+
+sol:
+====
+
+alter table employee add (mobileNo int(10),address varchar(20));
+
+
+b)using alter modifying existing column:
+----------------------------------------
+
+syntax:
+-------
+
+alter table tablename modify colunname datatype;
+
+
+ex:
+===
+modify the size of job column 20 to 10 size.
+
+sol:
+=====
+alter table employee modify job varchar(10);
+
+
+ex:
+===
+modify the size of address column 20 to 30 size.
+
+sol:
+----
+alter table employee modify address varchar(30);
+
+
+ex:
+---
+change mobileno datatype int to decimal
+
+sol:
+----
+alter table employee modify mobileNo decimal(10);
+
+note:
+=====
+if want to  decrease the size or change the datatype of column
+firt we need to make column should contain null values.
+
+
+c)using alter we can drop a column
+===================================
+syntax:
+-------
+
+alter table tablename drop columname;
+
+ex:
+===
+
+drop a column address  using alter from employee table
+
+sol:
+----
+
+alter table employee drop address;
+
+
+d)using alter we can rename a columnanme:
+==========================================
+
+syntax:
+--------
+
+alter table tablename rename column oldcolname to new colname;
+
+ex:
+---
+rename columname sal to salary in employee table
+
+sol:
+---
+
+alter table employee rename column sal to salary;
+
+
+e)using alter we can add a constraint:
+======================================
+syntax:
+-------
+
+alter table tablename add constraint constraintname column;
+
+
+
+3)rename at DDL:
+==============
+
+rename a object 
+
+syntax:
+=======
+
+rename table oldtablename to newtablename;
+
+ex:
+===
+rename table name employee to employees;
+
+sol:
+---
+
+rename table employee to employees;
+
+
+4) truncate :
+=============
+truncate command is used to remove or delete all the records or rows or tuples from a table.
+
+note:
+====
+once table is truncated we cannot restore those delete records.
+
+syntax:
+-------
+truncate table tablename;
+
+
+ex:
+---
+truncate a table employees;
+
+sol:
+----
+truncate table employee;
+
+
+5)drop
+======
+
+drop command is used to drop a objects(table,function,procedure...etc);
+
+note:
+-----
+drop command will remove the strucutre and data from the database.
+
+syntax:
+========
+
+drop table tablename;
+
+ex:
+---
+
+drop a table named as employees;
+
+sol:
+----
+
+drop table employees;
+
+
+DML:
+====
+Dml is used to perform manipulation(insert,update,delete) on the table data.
+
+
+insert:
+=======
+using insert command we can insert a row or record into table.
+
+
+1)insert record for the all the columns:
+=========================================
+
+a) create table named as employees(empno,ename,job,sal,hiredate);  date format:-  'yyyy-mm-dd'
+
+b) insert five records into employees table for all the columns.
+
+
+sol:
+====
+
+create table employees(empno int(4),ename varchar(20),job varchar(15),sal decimal(10,2),hiredate date);
+
+
+insert into employees values(7547,'smith','salesman',3000,'2018-10-02');
+
+insert into employees values(7566,'martin','accounts',4000,'2017-01-08');
+
+insert into employees values(7544,'john','hr',5000,'2018-01-10');
+
+insert into employees values(7565,'rahul','research',5000,'2015-09-21');
+
+insert into employees values(7556,'roja','clerk',4000,'2014-02-02');
+ 
+
+2)insert the record into a table for specific columns:
+------------------------------------------------------
+
+syntax:
+=======
+
+insert into tablename (col1,col2,col3,col4) values (value1,value2,value3,value4);
+
+ex:
+===
+insert 3 record into a table for specific columns(empno,ename,sal) of employees
+
+sol:
+====
+
+insert into employees(empno,ename,sal) values (7856,'venkat',6000);
+
+
+insert into employees(empno,ename,sal) values (7968,'srikar',5000);
+
+
+insert into employees(empno,ename,sal) values (7868,'sumit',4000);
+
+
+
+3)insert multiple records :
+============================
+
+syntax:
+-------
+
+insert into tablename  values 
+    (value1,value2,value3,value4),
+    (value1,value2,value3,value4),
+  (value1,value2,value3,value4),
+  (value1,value2,value3,value4),
+   (value1,value2,value3,value4);
+
+
+ex:
+===
+insert multiple records into employees table
+
+sol:
+----
+
+insert into employees values 
+  (7187,'madhu','Trainee',4000,'2020-12-10'),
+  (7154,'suhas','manager',6000,'2009-09-09'),
+  (7787,'balu','analyist',9000,'2018-10-02');
+
+
+
+
+Update:
+=======
+update is used to update the existing record data from the table.
+
+syntax:
+=======
+
+update tablename set colname1=value1,colname2=value2,colname=value3 
+                                      [where condition]
+
+note:
+====
+If where condition is not specified then all the records will be 
+ updated in the table.
+
+
+Ex:
+===
+update sal column(3000 to 5000) of employees record where empno 7547 
+
+sol:
+====
+
+update employees set sal=5000 where empno=7547;
+
+Ex
+---
+write a query to update job,ename columns of employees table where sal is 5000;
+
+sol:-
+=====
+
+update employees set ename='AAA',job='consultant' where sal=5000;
+
+Ex:
+===
+write a query to update sal with bonus 100 for all the employees;
+
+sol:
+----
+
+update employees set sal=sal+1000;
+
+
+
+delete:
+=======
+delete command is used to delete a specific records based on condition or
+we can delete all the records with out condition.
+
+syntax:
+-------
+
+delete from tablename [where condition];
+
+note:
+=====
+if where condition is not specified all the records will be deleted.
+
+
+ex:
+===
+write a query to delete a record from employees table where sal is 10000;
+
+sol:
+----
+
+delete from employees where sal=10000;
+
+ex:
+===
+
+write a query to delete a records from employees table where sal is 6000;
+
+sol:
+----
+delete from employees where sal=6000;
+
+
+
+DRL:
+====
+cmd: select
+
+select command is used to display all columns or specific columns data from a table.
+
+syntax:
+-------
+select * [specific columns] from tablename [where condition]
+
+
+ex1:
+====
+write a query to all the records from the employees table?
+
+sol:
+----
+select * from employees;
+
+
+ex2:
+====
+write a query to display empno,enmae,sal from employees table ?
+
+sol:
+----
+select empno,ename,sal from employees;
+
+
+ex3:
+----
+
+write a query to display records where sal is 5000 to 7000 ?
+
+sol:
+----
+select * from employees where sal>=5000 and sal<=7000;
+
+
+
+
+Insert into select:
+===================
+inser into select statement copies the data from one table and
+ inserts into antoher table
+
+note:
+-----
+In insert into select statement that source data types and target
+data types should be same.
+
+
+sytntax:
+--------
+insert into tgt_tablename select *[specific columns ] from src_tablename 
+[where condition]
+
+ 
+ex1:
+===
+copy the empno,ename columns data from employees table and insert
+into student(sid,sname);
+
+sol:
+====
+create table student(sid int(4),sname varchar(20));
+
+insert into student select empno,ename from employees ;
+
+or
+
+insert into student(sid,sname) select empno,ename from employees;
+
+
+
+to display the current sysdate
+==============================
+select current_date();
+
+
+using current_date() in insert command:
+=======================================
+
+insert into employees values (7777,'rakesh','clerk',4000,current_date())
+
+
+copy table columns schema but not data:
+======================================
+
+create table tablename as select * [specific columns ] from table where 1=2;
+
+ex1:
+===
+
+create a table named as emp11 as copy structure of empno,ename,sal with out data.
+
+sol:
+====
+
+create table emp11 as select empno,ename,sal from employees where 1=2;
+
+
+copy table columns schema with data:
+======================================
+
+create table tablename as select * [specific columns ] from table;
+
+ex1:
+===
+
+create a table named as emp12 as copy structure and data of empno,ename,sal 
+with data.
+
+sol:
+====
+
+create table emp12 as select empno,ename,sal from employees;
+
+
+
+
+
+CONSTRAINTS:
+============
+MySQL CONSTRAINT is used to define rules to allow or restrict what values can be stored in columns. 
+The purpose of inducing constraints is to enforce the integrity of a database.
+
+MySQL CONSTRAINTS are used to limit the type of data that can be inserted into a table.
+
+MySQL CONSTRAINTS can be classified into two types - column level and table level.
+
+The column level constraints can apply only to one column where as table level constraints are applied 
+to the entire table.
+
+
+MySQL CONSTRAINTs are :
+-----------------------
+
+NOT NULL
+UNIQUE
+PRIMARY KEY
+FOREIGN KEY
+CHECK
+DEFAULT
+
+
+NOT NULL:
+---------
+In MySQL NOT NULL constraint allows to specify that a column can not contain any NULL value.
+
+syntax:
+-------
+create table tablename ( 
+                        colum1 datatype not null,
+                        column2 datatype not null,
+                        column3 datatype not null)
+
+
+Ex:
+---
+create table named as ex1(empno,ename,sal) with not null constraints.
+
+sol:
+====
+
+create table ex1(
+                 empno int(4) not null,
+                  ename varchar(20) not null,
+                   sal decimal(10,2) not null);
+
+
+mysql> insert into ex1 values(1,null,3000);
+ERROR 1048 (23000): Column 'ename' cannot be null
+
+
+
+DEFAULT:
+--------
+It ensures that the column sets a default value for empty records.
+
+In a MySQL table, each column must contain a value ( including a NULL). While inserting data into a table, 
+if no value is supplied to a column, then the column gets the value set as DEFAULT.
+
+syntax:
+=======
+
+create table tablename(
+                        col1 datatype [null | not null] default value,
+			col2 datatype [null | not null] default value,
+			col3 datatype [null | not null] default value);
+
+Ex:
+---
+create table named as ex2(sid,sname,marks) with not noll and  default constraint for marks.
+
+sol:
+----
+create table ex2(
+		  sid int(4) not null,
+                  sname varchar(10) not null,
+		  marks int(4) not null default 0);
+
+
+mysql> insert into ex2 values(1,'ss',30);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex2 values(1,'ss',null);
+ERROR 1048 (23000): Column 'marks' cannot be null
+mysql> insert into ex2 (sid,sname) values (2,'BB');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from ex2;
++-----+-------+-------+
+| sid | sname | marks |
++-----+-------+-------+
+|   1 | ss    |    30 |
+|   2 | BB    |     0 |
++-----+-------+-------+
+2 rows in set (0.00 sec)			
+
+
+
+
+CHECK:
+------
+A CHECK constraint controls the values in the associated column. 
+The CHECK constraint determines whether the value is valid or not from a logical expression (condition).
+
+syntax:
+-------
+check (condition)
+
+
+create table tablename(
+                        col1 datatype [null | not null] default value,
+			col2 datatype [null | not null] check(condition) ,
+			col3 datatype [null | not null] default value);
+
+
+ex:
+---
+create a table named as ex3(sid,sname,age,address) with not null constraint and apply
+check constraint for age column(age should be greater than 18)
+
+sol:
+----
+colum-level
+-----------
+create table ex3(
+		  sid int(4) not null,
+		  sname varchar(10) not null,
+		  age  int(3) not null check(age>18),
+		  address varchar(10) not null);
+ 
+
+mysql> insert into ex3 values(1,'smith',19,'CHE');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex3 values(2,'smith',17,'CHE');
+ERROR 3819 (HY000): Check constraint 'ex3_chk_1' is violated.
+mysql>
+
+
+table-level:
+============
+syntax;
+------
+create table tablename(
+                        col1 datatype [null | not null],
+			col2 datatype [null | not null] ,
+			col3 datatype [null | not null] default value,
+                        check(condition) );
+
+ex:
+---
+create a table named as ex4(empno,ename,sal,job,address) with check constraint for sal(sal>1500) at table level
+
+sol:
+----
+create table ex4(
+		empno int(4) not null,
+		ename varchar(10) not null,
+		sal int(5) not null,
+		job varchar(10) not null,
+		address varchar(10),
+		check(sal>1500));
+
+mysql> insert into ex4 values(101,'john',1600,'clerk','boston');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex4 values(102,'martin',1400,'accounts','ny');
+ERROR 3819 (HY000): Check constraint 'ex4_chk_1' is violated.
+
+
+
+
+
+
+UNIQUE:
+-------
+The UNIQUE constraint in MySQL does not allow to insert a duplicate value in a column.
+ 
+The UNIQUE constraint maintains the uniqueness of a column in a table. 
+More than one UNIQUE column can be used in a table.
+
+colum-level
+-----------
+create table tablename(
+                        col1 datatype [null | not null] default value,
+			col2 datatype [null | not null] unique,
+			col3 datatype [null | not null] default value);
+
+
+
+ex:
+---
+create table named as ex5(empno,ename,sal) with not null constraint for ename,sal and unique constraint
+for empno
+
+sol:
+----
+create table ex5(
+                  empno int(5) unique,
+		  ename varchar(10) not null,
+		  sal int(5) not null);
+
+
+mysql> insert into ex5 values(1,'rohan',4000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex5 values(1,'ew',5000);
+ERROR 1062 (23000): Duplicate entry '1' for key 'empno'
+mysql> insert into ex5 values(null,'ew',5000);
+
+
+Table-level
+-----------
+create table tablename(
+                        col1 datatype [null | not null],
+			col2 datatype [null | not null],
+			col3 datatype [null | not null],
+			unique(columname),
+                        );
+
+ex:
+---
+create table ex6( empno int(4),
+		  ename varchar(10) not null,
+	          sal int(5) not null,
+		  job varchar(10) not null,
+		  unique(empno));
+
+
+mysql> insert into ex6 values(1,'ew',5000,'hr');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex6 values(1,'ew',5000,'hr');
+ERROR 1062 (23000): Duplicate entry '1' for key 'empno'
+
+
+
+
+
+PRIMARY KEY:
+------------
+It uniquely identifies a row in the table. It is a combination of NOT NULL and UNIQUE constraints
+
+A PRIMARY KEY constraint for a table enforces the table to accept unique data for a specific column.
+
+Note:
+-----
+A Table Should contain only one primary key.
+
+
+syntax:
+-------
+
+colum-level
+
+create table tablename(
+                        col1 datatype primary key,
+			col2 datatype not null
+			col3 datatype not null);
+
+ex:
+---
+create a table named as ex7(empno,ename,sal)with primary key (empno)
+
+sol:
+----
+create table ex7( empno int(4) primary key,
+		  ename varchar(10) not null,
+		  sal int(5));
+
+mysql> insert into ex7 values(1,'ashok',300);
+ERROR 1062 (23000): Duplicate entry '1' for key 'Primay'
+mysql> insert into ex7 values(null,'ashok',300);
+ERROR 1048 (23000): Column 'empno' cannot be null
+
+
+Table-level:
+-------------
+
+create table tablename(
+                        col1 datatype ,
+			col2 datatype not null,
+			col3 datatype not null,
+			primary key(columnname),
+			);
+
+ex:
+---
+create table ex8( empno int(4),
+		  ename varchar(10),
+		  sal int(5),
+		  primary key(empno));
+
+
+mysql> insert into ex8 values(1,'ashok',300);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into ex8 values(1,'ashok',300);
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+mysql> insert into ex8 values(null,'ashok',300);
+ERROR 1048 (23000): Column 'empno' cannot be null
+mysql>
+
+
+
+FOREIGN KEY:
+------------
+A FOREIGN KEY in MySQL creates a link between two tables by one specific column of both tables. 
+
+The specified column in one table must be a PRIMARY KEY and 
+referred by the column of another table known as FOREIGN KEY.
+
+we can add foreign key for specified column using References keyword.
+
+syntax:
+-------
+column-level
+------------
+
+create table tablename(col1 datatype,
+			col2 datatype,
+			col 3 datatype,
+			specified_column datatype references parent_table(primary key column name));
+                        specified_column datatype references parent_table(primary key column name));
+
+ex:
+---
+create parenttable named as dept_1(deptno,dname,loc) and here deptno is primary key
+create child table named as emp_1(empno,ename,sal deptno) here-deptno is specified column
+and empno is pk ,link between two tables dept_1,emp_1 using specified column(deptno);
+
+sol:
+---
+create table dept_1(
+			deptno int(3) primary key,
+			dname varchar(10),
+			loc varchar(10)
+                    );
+
+create table emp_1(
+		    empno int(4) primary key,
+		    ename varchar(10),
+		    sal int(5),
+		    deptno int(3) references dept_1(deptno));  
+
+ 
+first insert into parent table followed by child table.
+
+select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
+from information_schema.KEY_COLUMN_USAGE
+where TABLE_NAME = 'EMP_1';
+
+
+Ex:
+---
+table-level
+-----------
+syntax:
+-------
+create table tablename(col1 datatype,
+			col2 datatype,
+			col 3 datatype,
+ 			specifiedcolumn datatype,
+		       foreign key(specified_column) REFERENCES parent_table(Specified_column-pk);
+
+
+
+create a table name is course(cid,cname,fee)  -->cid act as pk
+
+create a table name is student_1(sid,sname,address,cid)--> sid is pk and cid fk
+link two tables using a specified column(cid).
+
+
+sol:
+----
+create table course(
+                     cid int(4),
+		     cname varchar(10),
+                     fees int(4),
+		     primary key(cid));
+
+
+child table:
+-------------
+create table student_1(
+			sid int(4),
+	   		sname varchar(10),
+			address varchar(10),
+			cid int(4),
+			primary key(sid),
+			foreign key(cid) REFERENCES course(cid));
+
+
+to display all constraints from STUDENT_1 table
+================================================
+select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
+from information_schema.KEY_COLUMN_USAGE
+where TABLE_NAME = 'STUDENT_1';
+
+
+first insert the records into parent table followed by child table.
+
+
+ ON DELETE CASCADE:
+ ==================
+ IF TRY TO DELETE A RECORD FROM PARENT TABLE IF
+ THEIR EXISTS DEPENDENT RECORD (CHILD RECORD),WE WILL GET
+ ERROR
+
+ 
+ TO RESOLVE THIS ERROR
+ ----------------------
+
+ WE NEED TO CREATE A CHILD TABLE WITH FOREIGN KEY FOLLOWED BY
+ ON DELETE CASCADE CONSTRAINT.
+
+
+ Ex:
+ ---
+  create table named as product_1(pid,pname,price) --> pid is pk
+  create table named as customer_1(cid,cname,address,pid)--> cid is pk and pid is fk
+  link two tables using specified column(pid) with on delete cascade;
+
+sol:
+====
+
+create table product_1(pid int(4) primary key,
+		       pname varchar(10),
+	               price decimal(10,2));
+
+
+child table with on delete cascade:
+-----------------------------------
+
+create table customer_1(  
+			  cid int(4) primary key,
+			  cname varchar(10),
+			  caddress varchar(10),
+			  pid int(4),
+                          foreign key(pid) REFERENCES product_1(pid) on delete cascade);
+
+
+first insert the records into parent table followed by child table.
+
+delete a record from parent check it record is delete or not ? yes deleted
+
+
+
+To display all constraints on a table, you can try any of the following methods 
+----------------------------------------------------------------------------------
+
+Method 1 − Using SHOW command
+------------------------------
+You can check with the help of show command. 
+
+The syntax is as follows 
+------------------------
+
+SHOW CREATE TABLE yourTableName;
+
+
+Method 2 − Using information.schema
+------------------------------------
+you can use information.schema. 
+
+The syntax is as follows
+------------------------
+
+select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
+from information_schema.KEY_COLUMN_USAGE
+where TABLE_NAME = 'yourTableName';
+
+
+ex:
+====
+
+select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
+from information_schema.KEY_COLUMN_USAGE
+where TABLE_NAME = 'EMP_1';
+
+
+Alter Level:
+============
+ex:
+---
+
+create table emp_dup(empno int(4),ename varchar(10),sal int(5));
+
+adding primary key for empno at alter level:
+-----------------------------------------
+
+alter table emp_dup add primary key(empno);
+
+adding check constraint for sal alter level:
+--------------------------------------------
+alter table emp_dup add check(sal>1500);
+
+
+adding unique constraint at alter level:
+=========================================
+syntax:
+-------
+alter table tablename add unique(columname);
+
+adding foreign key constraint at alter level:
+==============================================
+syntax:
+-------
+alter table tablename add foreign key(specifiedcolumn) REFERENCES parent_table(specified-column-pk);
+
+note:
+-----
+Adding not null and default constraint at alter level and table level are not possibe.
+
+
+
+select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
+from information_schema.KEY_COLUMN_USAGE
+where TABLE_NAME = 'EMP_DUP';
+
+
+to drop a constraint a column:
+==============================
+
+alter table tablename drop constraint_name;
+
+alter table emp_dup drop PRIMARY key;
+
+
+
+Mysql Aliases:
+==============
+Mysql aliases can be used to create a temporary name for columns or tables.
+
+syntax for columns:
+-------------------
+
+column_name [As] alias_name
+
+syntax for tables:
+==================
+
+table_name [as] alias_name
+
+
+ex:
+----
+mysql> select current_date() as 'todayDate' ;
+
+mysql> select current_date() 'todayDate' ;
+
+mysql> select current_date() todayDate ;
++------------+
+| todayDate  |
++------------+
+| 2021-03-03 |
++------------+
+
+
+ex:
+---
+mysql> select e.ename,e.sal from employees as e;
+
+mysql> select e.ename,e.sal from employees e;
