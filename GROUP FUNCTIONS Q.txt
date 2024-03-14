@@ -1,0 +1,14 @@
+1. Display the maximum, minimum and average salary and commission earned.
+
+2. Display the department number, total salary payout and total commission payout for each department
+
+3. Display the department number, total salary payout and total commission payout for each department
+that pays at least one employee commission.
+
+4. Display the department number and number of clerks in each department.
+
+5. Display the department number and total salary of employees in each department that employs four
+or more people.
+
+6. Display the employee number of each employee who manages other employees with the number of
+people he or she manages.

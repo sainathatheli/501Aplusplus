@@ -1,0 +1,13 @@
+1. Arrange employee records in ascending order of their sal ?
+
+2. Arrange employee records in descending order of their sal ?
+
+3. Display employee records working for 10th dept and arrange the result in ascending order of their sal ?
+
+4. Arrange employee records in ascending of their deptno and with in dept arrange records in descending order of their sal ?
+
+5. In ORDER BY clause we can use column name or column position, for example
+
+6. Arrange employee records in descending order of their comm. if comm . 
+   Is null then arrange those records last ?
+

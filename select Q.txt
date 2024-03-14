@@ -1,0 +1,24 @@
+1. Display all information in the tables EMP and DEPT.
+
+2. Display only the hire date and employee name for each employee.
+
+3. Display the hire date, name and department number for all clerks.
+
+4. Display the names and salaries of all employees with a salary greater than 2000.
+
+5. Display the names of all employees with an `A' in their name
+
+6. Display the names of all employees with exactly 5 letters in their name.
+
+7. Display the names and hire dates of all employees hired in 1981 or 1982
+
+8. Display the names and dates of employees with the column headers \Name" and \Start Date"
+
+9. Display the names and hire dates of all employees in the order they were hired.
+
+10. Display the names and salaries of all employees in reverse salary order.
+
+11. Display `ename of department deptno earned commission $' for each salesman in reverse salary order
+
+12. Display the department numbers of all departments employing a clerk.
+

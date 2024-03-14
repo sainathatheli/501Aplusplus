@@ -1,0 +1,9 @@
+1. Display ename,salaries and display names in lower case ?
+
+2. convert all ename from uppercase to lowercase in table ? 
+
+3. Display employee records whose whose name constain 5 characters ?
+
+4. select SUBSTR('hello',2,4) FROM DUAL;
+
+5. SELECT SUBSTR('hello welcome',-5,4) FROM DUAL;
