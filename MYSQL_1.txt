@@ -1,4 +1,4 @@
-https://github.com/sainathatheli/6A406
+https://github.com/sainathatheli/5APlusplus
 
 
 
@@ -1305,3 +1305,1023 @@ ex:
 mysql> select e.ename,e.sal from employees as e;
 
 mysql> select e.ename,e.sal from employees e;
+
+
+
+Mysql Aliases:
+==============
+Mysql aliases can be used to create a temporary name for columns or tables.
+
+syntax for columns:
+-------------------
+
+column_name [As] alias_name
+
+syntax for tables:
+==================
+
+table_name [as] alias_name
+
+
+ex:
+----
+mysql> select current_date() as 'todayDate' ;
+
+mysql> select current_date() 'todayDate' ;
+
+mysql> select current_date() todayDate ;
++------------+
+| todayDate  |
++------------+
+| 2021-03-03 |
++------------+
+
+
+ex:
+---
+mysql> select e.ename,e.sal from employees as e;
+
+mysql> select e.ename,e.sal from employees e;
+
+
+
+Scriptfile:
+===========
+create a file , specify group of mysql commands and save the file with filename.sql
+
+to run script file:
+===================
+source  <absoultepathof the scriptfile.sql>
+
+
+Ex:
+===
+create a file named as mysqlscript.sql
+and add the following below commands
+
+1) create a table named as perosns(person_id,person_name,address);
+
+2) describe table persons
+
+3) insert multiple records into persons
+
+4) display the records from the persons table.
+
+
+to run :
+--------
+source mysqlscript.sql
+
+
+
+ JOINS:
+  ======
+   Join are used to retrieve the records from multiple tables .
+
+   join are used to create temporary a relation between the tables
+   based on common column.
+
+   if suppose we have n tables ,then the atleast the possible
+   join conditions are n-1.
+
+   join are performed based on a common column datatype.
+
+
+  Mysql supports following the types of joins
+  -------------------------------------------
+
+  Inner join
+
+  Left join
+  Right join
+  Full outer join
+
+  Self-join
+  Cross join
+
+
+  InnerJoin or equi-join:
+  -----------------------
+  Inner joins fetch or return the matched records from the both tables.
+
+  syntax:
+  --------
+  select specific_columns from table1 alias name inner join table2 aliasename 
+                                 on(table1.common_column_name=table2.common_column_name);
+
+
+
+  Ex:
+  ---
+  write a inner join or equi-join to fetch matched records from dept,emp tables.
+  dept(deptno,dname,loc)
+  emp(empno,ename,sal,job,deptno)
+
+  sol:
+  ---
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.job,e.deptno 
+   					from dept d  inner join emp e on(d.deptno=e.deptno);
+
+  
+
+  left Join:
+  ---------
+  left outer join fetches the matched records from both tables and
+  non-matched records from the left table.
+
+  syntax:
+  ------
+  select specific_columns from table1 alias name left [outer] join table2 aliasename 
+                                 on(table1.common_column_name=table2.common_column_name);
+  
+  note:
+  ----
+  Here table1 act as left table.
+
+  Ex:
+  ---
+  write a join  to fetch matched records from dept,emp tables and non-matched records from dept.
+  dept(deptno,dname,loc)
+  emp(empno,ename,sal,deptno)
+
+  sol:
+  ---
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.deptno 
+   					from dept d left join emp e on(d.deptno=e.deptno);
+
+
+  Right Join:
+  ---------
+  Right outer join fetches the matched records from both tables and
+  non-matched records from the Right table.
+
+  syntax:
+  ------
+  select specific_columns from table1 alias name Right [outer] join table2 aliasename 
+                                 on(table1.common_column_name=table2.common_column_name);
+  
+  note:
+  ----
+  Here table2 act as right table.
+
+  Ex:
+  ---
+  write a join  to fetch matched records from dept,emp tables and non-matched records from emp.
+  dept(deptno,dname,loc)
+  emp(empno,ename,sal,deptno)
+
+  sol:
+  ---
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.deptno 
+   					from dept d Right join emp e on(d.deptno=e.deptno);
+
+
+  Full outer Join:
+  ---------------
+  Full outer join fetches the matched records and
+  non-matched records from the both tables.
+
+  syntax:
+  ------
+  select specific_columns from table1 alias name Full [outer] join table2 aliasename 
+                                 on(table1.common_column_name=table2.common_column_name);
+
+   Ex:
+  ---
+  write a join  to fetch matched records and non-matched records from dept,emp tables.
+  emp(empno,ename,sal,deptno)
+
+  sol:
+  ---
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.deptno 
+   					from dept d full join emp e on(d.deptno=e.deptno);
+
+
+  --we can perform full outer join by union using left join and right join
+  ------------------------------------------------------------------------
+
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.deptno 
+   					from dept d left join emp e on(d.deptno=e.deptno)
+  union
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal,e.deptno 
+   					from dept d Right join emp e on(d.deptno=e.deptno);
+
+
+
+
+1)Write a query to get empno,ename,sal from emp
+  deptno,dname,loc from dept by using selection criteria display the deptno 20 decords.
+
+sol:
+----
+select e.empno,e.ename,e.sal,d.deptno,d.dname,d.loc from dept d join emp e
+on(d.deptno=e.deptno) and d.deptno=20;
+
+or
+
+select e.empno,e.ename,e.sal,d.deptno,d.dname,d.loc from dept d,emp e
+where d.depnto=e.deptno and d.deptno=20;
+
+
+
+
+
+
+
+
+
+
+
+
+  self Join:
+  ---------
+  A self join is a join that is used to join a table with itself.
+
+  note:
+  ----
+   we need to create  two aliasname on the same table.
+
+  ex:
+  ---
+  write a query to display employeenames and its managers from emp table using self join?
+ 
+  sol:
+  ----
+
+  select e.ename,m.ename as manager from emp e ,emp m where m.empno=e.mgr;
+ 
+
+  cross Join:
+  -----------
+  It will perform cartesian product.
+
+  ex:
+  ==
+  write query to perform cross join between dept and emp ?
+  dept--5records
+  emp -- 15 records 
+  cross join -- 5*15 = 75 records
+
+ sol:
+ ----
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal from dept d cross join emp e;
+
+  or
+
+  select d.deptno,d.dname,d.loc,e.empno,e.ename,e.sal from dept d,emp e;
+
+
+
+
+NATURAL JOIN:
+ =============
+ NATURAL JOIN IS SIMILAR TO INNER JOIN,
+ BUT THE CONDITION IS PERFORMED IMPLICITY BASED ON COLUMN NAME.
+
+ EX:
+ ===   
+
+ SELECT E.ENAME,D.DNAME FROM
+ DEPT D NATURAL JOIN EMP E;
+
+ NOTE:
+ ===== 
+ IN NATURAL JOIN THE COMMON COLUMN NAME BETWEEN  THE TWO TABLE
+ MUST BE SAME. IF NOT IT WILL PERFORM CROSS JOIN
+
+ NATURAL JOIN IS DEPENDENT ON COLUMN NAME .
+
+
+
+
+NON-EQUI JOIN:
+==============
+=,!= OTHER THAN THESE OPERATORS(like between,in,...)
+
+
+SALGRADE Table
+------------------
+CREATE TABLE SALGRADE (GRADE int,LOSAL int,HISAL int); 
+
+INSERT INTO SALGRADE VALUES (1,  700, 1200); 
+INSERT INTO SALGRADE VALUES (2, 1201, 1400); 
+INSERT INTO SALGRADE VALUES (3, 1401, 2000); 
+INSERT INTO SALGRADE VALUES (4, 2001, 3000); 
+INSERT INTO SALGRADE VALUES (5, 3001, 9999);
+
+
+1)WRITE A NON-EQUI JOIN QUERY 
+TO GET EMPNO,ENAME,SAL FROM EMP
+GRADE FROM SAL GRADE
+AND DISPLAY SALARIES BASED ON E.SAL COLUMN BETWEEN
+THE RANGE OF LOSAL AND HISAL COLUMNS OF SALGRADE TABLE.
+
+SOL:
+=====
+
+SELECT E.EMPNO,E.ENAME,E.SAL,S.GRADE
+FROM EMP E,SALGRADE S WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL;
+
+
+
+
+
+
+
+Operators in MySQL
+-------------------
+Operators are used to specifying a condition in a statement in MySQL. 
+Below are the different types of operators used in MySQL.
+
+1. Arithmetic Operators
+------------------------
+In MySQL, arithmetic operators are used to perform the arithmetic operations as described below.
+
+
+Arithmetic Operators in MySQL
+-----------------------------
+
+Operator	Description									Example
++		Addition of two operands							a + b
+–		Subtraction of right operand from the left operand				a – b
+*		Multiplication of two operands							a * b
+/		Division of left operand by the right operand					a / b
+%		Modulus – the remainder of the division of left operand by the right		a % b
+
+
+Comparison Operators or relation operators
+------------------------------------------
+
+The comparison operators in MySql are used to compare values between operands and 
+return true or false according to the condition specified in the statement.
+
+
+Comparison Operators in MySQL
+-----------------------------
+
+Operator	Description	
+--------	------------
+>	If the value of left operand is greater than that of the value of the right operand, 
+        the condition becomes true; if not then false.	
+
+<	If the value of left operand is less than that of a value of the right operand, 
+         the condition becomes true; if not then false.	
+
+=	If both the operands have equal value, the condition becomes true; if not then false.
+
+!=	If both the operands do not have equal value, the condition becomes true; if not then false.
+
+>=	If the value of left operand is greater than or equal to the right operand, the condition becomes true; 
+         if not then false.
+	
+<=	If the value of left operand is less than or equal to the right operand, the condition becomes true;
+        if not then false.	
+
+<>	If the values of two operands are not equal, the condition becomes true; if not then false.	
+
+BETWEEN   RETURNS THE VALUE ,THE VALUE SPECIFIED IN THE RANGE.
+            (INCLUSIVE)
+
+IN      RETURNS THE VALUE ,THE VALUE AVAILABLE IN THE
+                          GIVEN LIST OF VALUES.
+
+
+Ex:
+---
+SELECT * FROM EMP WHERE SAL > 4000;
+
+SELECT * FROM EMP WHERE SAL = 3000;
+
+SELECT * FROM EMP WHERE SAL < 3000;
+
+SELECT * FROM EMP WHERE SAL !=3000;
+
+SELECT * FROM EMP WHERE SAL <>3000; -- not equal
+
+select * from emp where sal in(2000,3000,4000);
+
+
+
+
+
+
+Logical operators
+-----------------
+logical operators we perform boolean operations. 
+
+MySQL understands these logical operators: 
+AND, OR and NOT
+
+Logical operators return TRUE or FALSE. In MySQL, 1 is true, 0 is false.
+
+Ex:
+---
+1)The AND operator evaluates to true if both operands are true.
+
+mysql> SELECT FALSE AND FALSE, FALSE AND TRUE,TRUE AND FALSE, TRUE AND TRUE;
+
+
+2)The OR operator evaluates to true if at least one of the operands is true.
+
+mysql> SELECT FALSE OR FALSE, FALSE OR TRUE, TRUE OR FALSE, TRUE OR TRUE;
+
+3)The NOT operator is negation operator. It makes true false and false true.
+
+mysql> SELECT NOT TRUE, NOT FALSE;
+
+mysql> SELECT NOT (3=3);
+
+
+
+Ex:
+---
+1)WRITE A QUERY TO DISPLAY RECORD WITH SPECIFIED RANGE(between oper)
+  SAL 2000 AND 3000?
+sol:- 
+
+select * from emp where sal between 2000 and 3000;
+
+select * from emp where sal>=2000 and sal<=3000;
+
+
+2)WRITE A QUERY TO DISPLAY THE RECORDS BASED ON IN operator WHERE
+ SAL 1000,2000,3000 ON EMP TABLE.
+
+
+select * from emp where sal in(1000,2000,3000);
+
+or
+
+select * from emp where sal=1000 or sal=2000 or sal=3000;
+
+
+
+
+
+ LIKE OPERATOR:
+ ==============
+
+  IT WILL RETRUN THE VALUE BASED ON SEARCH OF PATTERN
+
+ THERE ARE TWO PATTERNS
+
+ %  --PERCENATAGE-- REPRESENT ONE OR MORE CHARACTERS
+ _  ---UNDERSCORE -- REPRESENT SINGLE CHARACTER
+
+
+  SYNTAX:
+  =======
+  LIKE 'PATTERN'
+
+ EX:
+ ===
+
+  WRITE A QUERY TO DISPALY ALL ENAMES FROM EMP
+  WHERE ENAME START WITH S.
+
+ SOL:
+ ====
+  SELECT ENAME FROM EMP WHERE ENAME LIKE 'S%';
+
+
+
+
+
+  ex:
+  ===
+  write a query to display all enames start with
+  sol:
+  =====
+  select ename from emp where ename like 'A_L%';
+
+
+
+
+
+
+
+ ORDER BY CLAUSE:
+ ================
+ THIS CLAUSE IS USED TO SORT THE OUTPUT STATEMENT BASED ON SELECT
+ QUERY.
+
+ BY DEFAULT IT SORT ASCENDING OR ASC
+
+ DESCENDING  
+ -----------
+ DESC
+
+ SYNTAX:
+ ========
+ SELECT * FROM TABLENAME [WHERE] [ORDER BY COLUMNANME...];
+
+
+
+ AGGREGATE FUNCTION or single row functions
+ ===========================================
+ An aggregate function performs a calculation on multiple values 
+ and returns a single value. 
+ ex:
+ ---
+  SUM 
+  AVG
+  MIN
+  MAX
+  COUNT
+  DISTINCT -- TO REMOVE DUPLICATE VALUES
+
+
+
+ GROUP BY Clause
+ ---------------
+ GROUP BY Clause is used to collect data from multiple records and group the result
+ by one or more column.
+ It is generally used in a SELECT statement.
+
+ You can also use some aggregate functions like COUNT, SUM, MIN, MAX, AVG etc. on the grouped column. 
+
+ SYNTAX:
+ =======
+
+  SELECT exp1,expr2,aggregate_function(expr) FROM TABLNAME [WHERE][GROUP BY exp1,expr2][ORDER BY COLUMNS];
+
+ note:
+ ----
+ The expressions that are not encapsulated within an aggregate function and must be included in the GROUP BY clause.
+
+ EX
+ ===
+ 1)WRITE A QUERY TO PERFORM SUM OF SALARIES BASED ON for EACH
+ DEPARTMENT NO FROM EMP TABLE.
+
+ sol:
+ ----
+  select Deptno,sum(sal) from emp group by deptno;
+
+  or 
+  
+  select Deptno,sum(sal) from emp group by deptno order by deptno;
+ 
+
+
+ 2) WRITE A QUERY TO PERFROM SUM OF SALARIES BASED ON for EACH
+    DEPARMTENT NO AND COUNT NO EMPLOYESS IN EACH DEPT FROM EMP.
+  
+  sol:
+  ----
+   select deptno,count(ename),sum(sal) from emp group by deptno order by deptno;
+   
+ 3)WRITE A QUERY TO PEFROM SUM OF SALARIES BASED ON
+   for EACH DEPTNO AND for EACH JOB .
+
+ sol:
+ ----
+  select  deptno,job,sum(sal),count(ename) from emp group by deptno,job order by deptno;
+ 
+  
+
+ HAVING Clause
+ -------------
+ 
+ HAVING Clause is used with GROUP BY clause. It always returns the rows where condition is TRUE.
+
+ The  HAVING clause is used in the SELECT statement to specify filter conditions for a group of rows or aggregates.
+
+ The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
+ If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+
+ syntax:
+ -------
+ SELECT exp1,expr2,aggregate_function(expr) FROM TABLNAME [WHERE][GROUP BY exp1,expr2] 
+								[Having condition][ORDER BY COLUMNS];
+
+ Ex;
+   ===
+   Write a query to display sum(sal) of for each dept sum(sal)greater 8750?
+
+   sol:
+   ---
+
+    select deptno,sum(sal) as ssal from emp group by deptno having sum(sal)>8750;
+
+	or
+
+    select deptno,sum(sal) as ssal from emp group by deptno having ssal>8750  ;
+
+
+
+String Functions:
+------------------ 
+
+MySQL string functions that allow you to manipulate character string data effectively.
+
+1. ASCII(str)
+--------------
+Returns the ASCII value of the leftmost character of the string str.
+
+Ex:
+--
+mysql> select ascii('a');
++------------+
+| ascii('a') |
++------------+
+|         97 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select ascii('A');
++------------+
+| ascii('A') |
++------------+
+|         65 |
++------------+
+1 row in set (0.00 sec)
+
+Ex:
+---
+mysql> select ascii(ename) from emp;
++--------------+
+| ascii(ename) |
++--------------+
+|           83 |
+|           65 |
+|           87 |
+|           74 |
+|           77 |
+|           66 |
+|           67 |
+|           83 |
+|           75 |
+|           84 |
+|           65 |
+|           74 |
+|           70 |
+|           77 |
++--------------+
+
+2.CHAR_LENGTH(str)
+------------------
+Returns the length of the string str in characters.
+
+ex:
+----
+mysql> select char_length('welcome');
++------------------------+
+| char_length('welcome') |
++------------------------+
+|                      7 |
++------------------------+
+1 row in set (0.00 sec)
+
+ex:
+----
+select ename,char_length(ename) as "len" from emp;
+
+
+3.CONCAT(str1, str2, …., strn)
+------------------------------
+Returns a string formed by joining str1 to strn. If any sub-string is NULL, the result is NULL.
+
+ex:
+---
+mysql> select concat('hello','hi','welcome') as concat;
+
+mysql> select concat('hello ',ename) from emp;
+
+
+
+
+
+
+4.CONCAT_WS(separator, str1, …, strn)
+--------------------------------------
+Returns a concatenated string separated by a separator.
+
+Ex:
+---
+mysql> select concat_ws('#','hello','hi','welcome') as concat_ws;
++------------------+
+| concat_ws        |
++------------------+
+| hello#hi#welcome |
++------------------+
+
+Ex:
+---
+mysql> select concat_ws('$','hello',ename) as concatws from emp;
+
+
+
+
+5.INSERT(str, pos, len, newstr)
+--------------------------------
+Replaces the sub-string starting at position pos and of length len in the string str with newstr.
+
+Ex:
+---
+mysql> select insert('welcome','3','3','aaa');
++---------------------------------+
+| insert('welcome','3','3','aaa') |
++---------------------------------+
+| weaaame                         |
++---------------------------------+
+
+Ex:
+---
+mysql> select ename,insert(ename,3,3,'hii') from emp;
+
+smith,3,3,'hii'  --smhii
+
+
+
+
+6.INSTR(str, substr) / LOCATE(substr, str) / POSITION(substr IN str)
+---------------------------------------------------------------------
+Returns the position of the first occurrence of substr in str.
+
+Ex:
+---
+mysql> select instr('foobar','oo');
+
+
+7.LCASE() / LOWER() and UCASE() / UPPER()
+-----------------------------------------
+Converts a string to lower case and upper case.
+
+Ex:
+===
+mysql> select lcase('HELLO');
+
+mysql> select lower('HELLO')
+
+mysql> select  ucase('sdsdsd');
+
+mysql> select  upper('sdsdsd');
+
+write a query to dislay the ename in lower case from emp table
+ select lower(ename) from emp;
+
+
+
+8.LEFT(str, len) / RIGHT(str, len)
+----------------------------------
+Returns the leftmost and rightmost len characters from the string str.
+
+Ex:
+--
+mysql> select left('hello',3);
++-----------------+
+| left('hello',3) |
++-----------------+
+| hel             |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select right('hello',3);
++------------------+
+| right('hello',3) |
++------------------+
+| llo              |
++------------------+
+1 row in set (0.00 sec)
+
+ select left(ename,3) from emp;
+ select right(ename,3) from emp;
+
+
+9.LENGTH(str) / OCTET_LENGTH(str)
+---------------------------------
+Returns the length of the string str in bytes. 
+
+This is very much like CHAR_LENGTH function. 
+
+Ex:
+===
+mysql> select length('welcome');
+
+mysql> select ename,length(ename),char_length(ename) from emp;
+
+
+LTRIM(str) / RTRIM(str) / TRIM(str)
+--------------------------------------
+Returns the string str after trimming white spaces from left, right or both ends.
+
+Ex;
+---
+mysql> select ltrim('  hello');
+
+mysql> select rtrim('hello   ');
+
+mysql> select trim('   hello   ');
+
+
+12.QUOTE(str)
+-------------
+This query quotes and un-quotes the string str. 
+Special characters are escaped.
+
+mysql> select quote('welcome$hello');
++------------------------+
+| quote('welcome$hello') |
++------------------------+
+| 'welcome$hello'        |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select quote('welcome\n hello');
++--------------------------+
+| quote('welcome\n hello') |
++--------------------------+
+| 'welcome
+ hello'         |
++--------------------------+
+
+select quote(ename) from emp;
+
+
+
+
+
+13.REPLACE(str, from_str, to_str)
+-----------------------------------
+Replaces all occurrences of sub-string from_str with sub-string to_str in the string str. 
+It is case-sensitive.
+
+Ex:
+---
+mysql> select replace('welcome','el','hi');
++------------------------------+
+| replace('welcome','el','hi') |
++------------------------------+
+| whicome                      |
++------------------------------+
+1 row in set (0.00 sec)
+
+
+Ex:
+---
+mysql> select ename,replace(ename,'S','A') from emp;
+
+
+
+14.REVERSE(str)
+---------------
+Reverses the string str.
+
+Ex:
+---
+mysql> select reverse('hello') ;
+
+mysql> select ename,reverse(ename) from emp;
+
+
+
+15.SUBSTR(str, pos)/SUBSTRING(str, pos)/SUBSTR(str, pos, len)/SUBSTRING(str, pos, len)
+--------------------------------------------------------------------------------------
+Returns a substring from the string str starting from position pos, 
+till the end if no len is specified or for len characters otherwise. 
+
+Remember, Index starts from 1 in MySQL
+
+Ex:
+==
+mysql> select substr('hello',2),substring('hello',2);
++-------------------+----------------------+
+| substr('hello',2) | substring('hello',2) |
++-------------------+----------------------+
+| ello              | ello                 |
++-------------------+----------------------+
+1 row in set (0.01 sec)
+
+mysql> select substr('hello',2,2),substring('hello',2,2);
++---------------------+------------------------+
+| substr('hello',2,2) | substring('hello',2,2) |
++---------------------+------------------------+
+| el                  | el                     |
++---------------------+------------------------+
+1 row in set (0.00 sec)
+
+Ex:
+---
+mysql> select substr('welcome',-4,3);
+
+
+
++------------------------+
+| substr('welcome',-4,3) |
++------------------------+
+| com                    |
++------------------------+
+1 row in set (0.00 sec)
+
+
+
+NUMBER FUNCTIONS:
+=================
+
+ABS -- IT WILL DISPLAY ABSLOUTE VALUE INTEGER.
+
+SYNTAX:
+=======
+ABS(NUM)
+
+EX:
+===
+
+SELECT ABS(5),ABS(-5),ABS(NULL);
+
+OLP:--  5,5,
+
+SQRT:
+=====
+IT WILL RETRUN SQRT ROOT VALUE OF A NUMBER.
+
+SYNTAX:
+========
+SQRT(NUM);
+
+EX:
+===
+
+SELECT SQRT(4),SQRT(9),SQRT(5),SQRT(NULL);
+
+OLP:-- 2,3,2.36,
+
+
+MOD:
+====
+
+THIS FUNCTION RETRUN REMAINDER.
+
+SYNTAX
+======
+
+MOD(VALUE,DIVISON);
+
+EX:
+===
+SELECT MOD(4,2),MOD(5,2);
+
+O/P:- 0,1
+
+ifnull():
+=========
+
+THIS FUNCTION IS USED TO REPLACE THE NULL VALUES.
+
+SYNTAX:
+-------
+ifNULL(colname,REPLACE VALUE)
+
+EX:
+===
+WRITE A QUERY TO DISPLAY COMM COLUMN FROM EMP
+AN REPLACE NULL VALUES WITH 0;
+
+SOL:
+====
+
+SELECT ifnull(COMM,0) FROM EMP;
+
+
+CEIL:
+======
+
+THIS FUNCTION ROUND THE VALUE TO not less than current value.
+
+SYNTAX:
+========
+
+CEIL(NUM);
+
+EX:
+===
+
+SELECT CEIL(4.5),CEIL(5),CEIL(4.2) ;
+
+OLP:- 5,5,5
+
+FLOOR:
+======
+THIS FUNCTION ROUND THE VALUE TO Lowest POSSIBLE VALUE
+
+SYNTAX:
+-------
+FLOOR(NUM);
+
+EX:
+===
+
+SELECT FLOOR(4.5),FLOOR(4.2),FLOOR(4.7);
+
+O/P:- 4,4,4,
+
+pow(numer,exponential):
+======================
+it will return power of an number.
+
+select pow(3,2),pow(2,3);
+
+o/p:-   9,8
+
+
