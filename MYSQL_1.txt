@@ -2475,7 +2475,13 @@ insert into test_v12 values(7323,'RAJESH',5000,10) //invalid
 
 
 
+ALter a view:
+--------------
+Alter view viewName as select * from tableName;
 
+ex:
+-----
+Alter view v1 as select empno,ename,job from emp;
 
 
 
