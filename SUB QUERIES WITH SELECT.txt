@@ -1,0 +1,31 @@
+EXERCISE ON SUBQUERIES: USE EMP AND DEPT
+------------------------------------------
+
+1. Display the names and job titles of all employees with the same job
+     as Jones.
+
+2. Display the names and department name of all employees 
+   working in the same city as Jones.
+
+3. Display the name of the employee whose salary is the lowest.
+
+4. Display the names of all employees except the lowest paid.
+
+5. Display the names of all employees whose job title is 
+    the same as anyone in the sales dept.
+
+6. Display the names of all employees who work in a department 
+   that employs an analyst.
+
+7. Display the names of all employees with their job title, 
+   their current salary and their salary following a 10% pay 
+   rise for clerks and a 7% pay rise for all other employees
+
+8. Display the names of all employees with their salary and
+   commission earned. Employees with a null
+   commission eld should have 0 in the commission column.
+    SELECT ename, sal, comm FROM emp WHERE comm IS NOT
+
+9. Display the names of ALL employees with the total 
+   they have earned (ie. salary plus commission).
+
