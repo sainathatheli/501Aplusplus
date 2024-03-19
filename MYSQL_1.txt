@@ -2909,3 +2909,281 @@ where dnkemp.dnk=2;
 
 
 
+INDEXES:
+========
+Index is a database object ,index is a pointer which
+locates the phsyical data of a table.
+
+we can create index explicity on columns,
+so that we can increase the performance of the sql statement query.
+
+
+TYPES OF INDEXES:
+======================================
+1)SIMPLE INDEX
+2)COMPLEX INDEX OR COMPOSITE INDEX
+
+
+SIMPLE INDEX:
+=============
+
+SIMPLE INDEX IS A INDEX WHICH IS CREATED BASED ON SINGLE COLUMN.
+
+SYNTAX:
+=======
+
+CREATE  INDEX INDEXNAME ON  TABLENAME(COLUMNANME)
+
+EX:
+===
+Before Index created:
+---------------------
+
+SELECT * FROM  employees WHERE hire_date > '2000-01-01';
+
+create  index:
+--------------
+CREATE INDEX i_hire_date ON employees(hire_date);
+
+
+After Index created:
+---------------------
+SELECT * FROM  employees WHERE hire_date > '2000-01-01';
+    
+
+NOTE:
+======
+WE NEED TO CREATE INDEX ON COLUMNS,THAT COLUMNS
+FREQUENTLY USED IN WHERE CLAUSE.
+
+WHEN CREATE INDEX THE TABLE WILL BE SCANNED BASED ON INDEX
+ RANGE SCAN.
+
+
+COMPLEX or composite index:
+---------------------------
+A COMPLEX INDEX IS CREATED BASED ON MORE THAN ONE COLUMN.
+
+SYNTAX:
+========
+CREATE INDEX INDEXNAME ON TABLENAME(COL1,COL2...,COL32);
+
+Ex:
+---
+Before Index created:
+---------------------
+SELECT  * FROM employees WHERE first_name = 'Georgi'AND last_name = 'Facello';
+
+create index:
+-------------
+
+CREATE INDEX i_composite ON employees(first_name, last_name);
+
+
+after index created:
+--------------------
+SELECT  * FROM employees WHERE first_name = 'Georgi'AND last_name = 'Facello';
+
+
+3)Unique index:
+----------------
+Syntax:
+--------
+create unique index indexname on tablename(columns);
+
+it will create the indexes on columns as well as it will create the unique constraints on 
+columns(duplicates not allowed).
+ex:
+---
+create unique index infy_fn_ln_uq on info_1(first_name,last_name);
+
+select * from info_1 where first_name='smith' and last_name='joe';
+
+explain select * from info_1 where first_name='smith' and last_name='joe';
+
+it will executes the select query based on index scan
+
+try to insert duplicates in info_1 table.
+
+insert into info_1 values(4,'smith','joe','sa',5000);
+insert into info_1 values(4,'smith','joe','sa',5000);//duplicates entery not allowed
+
+
+
+to list indexes on table from database
+=======================================
+show index from tablename from databasename;
+
+Ex:
+show index from emp from parul;
+
+
+to drop index:
+--------------
+DROP INDEX index_name ON table_name
+
+or
+
+alter table tablename drop index indexname;
+
+
+
+
+SET OPERATORS:
+==============
+UNION
+UNIONALL
+
+Rules for set operators:
+=======================
+1. Number of columns used in the query should match.
+2. column data type should match for the queries in set operators.
+
+UNION:
+======
+THIS OPERATEOR UNION RETRIVES THE OUTPUT OF TWO QUERIES 
+AND IT REMOVES DUPLICATE RECORDS.
+
+CREATE TABLE DEPT_U1 AS SELECT * FROM DEPT;
+CREATE TABLE DEPT_U2 AS SELECT * FROM DEPT;
+
+INSERT SOME RECORDS INTO ABOVE TWO TABLES.
+
+EX:
+====
+
+SELECT * FROM DEPT_U1
+UNION
+SELECT * FROM DEPT_U2;
+
+---IT WILL REMOVE DUPLICATES RECORDS.
+
+UNION ALL:
+==========
+
+SELECT * FROM DEPT_U1
+UNION ALL
+SELECT * FROM DEPT_U2;
+
+NOTE:
+=====
+IT WILL DISPLAY ALL THE DUPLICATE RECORDS FROM TWO TABLES
+
+ select ename from emp
+    -> union
+    -> select dname from dept;
+
+
+
+Variable:
+=========
+A variable allows a programmer to store data temporarily during the execution of code.
+
+syntax:
+-------
+set @variablename=initialize the value;
+
+display the data from variable:
+-------------------------------
+
+select @variablename;
+
+Ex:
+===
+set @name='Sumit deshpade';  --declare and initialize the variable
+  
+select @name; --display the variable 
+
++----------------+
+| @name          |
++----------------+
+| Sumit deshpade |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> set @dno=20;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from emp where deptno=@dno;
+
+
+Case- WHEN-END
+===============
+to check multiple conditions
+
+syntax:
+-------
+case columnname
+when condition then result
+when conditon then result
+
+[else]
+
+end;
+
+Ex:
+----
+mysql> select empno,ename,case sal
+    -> when 5000 then 'highest salary'
+    -> when 3000 then 'low salary'
+    -> else 'daily wages'
+    -> end as salary from emp;
+
+
+
+mysql> select empno,ename,sal,case
+    when sal>=5000 then 'highest salary'
+    when sal>2000 and sal <=3000 then 'low salary'
+    else 'daily wages'
+    end as status from emp;
+
+
+176(leet code) second highest salary:
+============================
+
+select case
+when count(salary)=0 then null
+else salary
+end
+as  SecondHighestSalary  from (select salary,dense_rank() over (order by salary desc) as 
+rnk from employee) re
+where re.rnk=2 
+
+or
+
+select if(count(salary)=0 ,null,salary)
+as  SecondHighestSalary  from (select salary,dense_rank() over (order by salary desc) as 
+rnk from employee) re
+where re.rnk=2 
+
+or
+
+select max(salary)
+as  SecondHighestSalary  from (select salary,dense_rank() over (order by salary desc) as 
+rnk from employee) re
+where re.rnk=2 
+
+
+
+
+if condition:
+-------------
+syntax:
+-------
+
+if (expr1,exp2,exp3)  --> if expr1 is true then it will return exp2,if not then it exp3;
+
+ex:
+---
+select if(10>5,'greater','lesser than 5')
+
+select sal,if(sal>=5000,'high salary','low salary') from emp;
+
+
+ifnull()  or NVl() or coalesce() --to replace the null with some values .
+
+
+
+
+
+
