@@ -3182,8 +3182,643 @@ select sal,if(sal>=5000,'high salary','low salary') from emp;
 
 ifnull()  or NVl() or coalesce() --to replace the null with some values .
 
+Locking Tables in mysql:
+------------------------
+You can restrict the access to records of the tables in MYSQL by locking them. These locks are used to keep other sessions away from modifying the tables in the current session.
+
+MySQL sessions can acquire or release locks on the table only for itself. To lock a table using the MySQL LOCK TABLES Statement you need have the TABLE LOCK and SELECT privileges.
+
+These locks are used to solve the concurrency problems. There are two kinds of MYSQL table locks −
+
+READ LOCK − If you apply this lock on a table the write operations on it are restricted. i.e., only the sessions that holds the lock can write into this table.
+
+WRITE LOCK − This lock allows restricts the sessions (that does not possess the lock) from performing the read and write operations on a table.
+
+Syntax:
+-------
+Following is the syntax of the MySQL LOCK TABLES Statement −
+
+LOCK TABLES table_name [READ | WRITE];
+
+Unlocking Tables in MySQL
+------------------------
+Once the client session is done using/accessing a MySQL table, they must unlock the table for other client sessions to use it. To do so, you can use the MySQL UNLOCK TABLE statement. This will release the table until other sessions lock it again.
+
+Syntax:
+-------
+Following is the syntax of the MySQL UNLOCK TABLES Statement −
+
+UNLOCK TABLES;
 
 
+
+How to create a user:
+---------------------------
+syntax:
+-------
+CREATE USER 'username'@'host' IDENTIFIED [WITH] BY 'password';
+
+Grant Privileges:
+-----------------
+GRANT ALL PRIVILEGES ON * . * TO 'new_user'@'localhost';
+
+ex:
+---
+CREATE USER 'raj'@'localhost' IDENTIFIED BY 'raj';
+
+GRANT ALL PRIVILEGES ON * . * TO 'raj'@'localhost';
+
+
+to list all users:
+-------------------
+select user,host,account_locked from mysql.user;
+
+
+to drop the user:
+------------------
+syntax:
+-------
+drop user 'username'@'localhost';
+
+ex:
+----
+drop user 'lucky'@'localhost' ;
+
+select user,host,account_locked from mysql.user;
+
+
+to lock the user:
+-----------------
+syntax:
+alter user 'username'@'localhost' account lock;
+
+Ex:
+----
+alter user 'sarath'@'localhost' account lock;
+
+cmd> mysql -u sarath -p
+Enterpasswor:***** 
+
+will you get the error
+
+to check whether user is locked or not :
+-----------------------------------------
+SELECT user, host, account_locked  FROM mysql.user  
+WHERE user = 'sarath' AND host = 'localhost'; 
+
+to lock unlockthe user:
+-----------------
+alter user 'username'@'localhost' account unlock;
+
+Ex:
+---
+alter user 'sarath'@'localhost' account unlock;
+
+cmd> mysql -u sarath -p
+Enterpasswor:***** 
+
+
+
+
+Procedure
+=========
+A procedure (often called a stored procedure) is a collection of pre-compiled SQL statements stored inside the database. 
+It is a  subprogram in the regular computing language. 
+
+A procedure always contains a name, parameter lists, and SQL statements. 
+
+We can invoke the procedures by using triggers, other procedures and applications such as Java, Python, PHP, etc.
+
+
+Stored Procedure Features
+-------------------------
+Stored Procedure increases the performance of the applications. Once stored procedures are created, 
+they are compiled and stored in the database.
+
+Stored procedure reduces the traffic between application and database server. Because the application has to 
+send only the stored procedure's name and parameters instead of sending multiple SQL statements.
+
+Stored procedures are reusable and transparent to any applications.
+
+A procedure is always secure.The database administrator can grant permissions to 
+applications that access stored procedures in the database without giving any permissions on the database tables.
+
+syntax:
+-------
+
+DELIMITER &&  or DELIMITER //
+CREATE PROCEDURE procedure_name [[IN | OUT | INOUT] parameter_name datatype [, parameter datatype]) ]    
+BEGIN    
+    Declaration_section    /*to declare local variables using delcare keyword*/
+    Executable_section    
+END &&   or  //
+DELIMITER ;  
+
+
+The procedure syntax has the following parameters:
+
+Parameter Name						Descriptions
+--------------				-----------------------------------------------
+procedure_name				It represents the name of the stored procedure.
+
+parameter				It represents the number of parameters. It can be one or more than one.
+
+Declaration_section			It represents the declarations of all variables.
+
+Executable_section			It represents the code for the function execution or sql queries.
+
+ 
+MySQL procedure parameters
+==========================
+
+IN: These types of parameters are assigned the values while calling the stored procedure and 
+    the value cannot be modified or overwritten inside the stored procedure but only referenced and 
+    used by the stored procedure.
+
+OUT: These are the parameters that can be assigned the values and overridden in the stored procedure 
+     but cannot be referenced by it.
+
+IN OUT: These types of parameters are assigned the values while calling the stored procedure and 
+        the value can be modified or overwritten inside the stored procedure as well as
+        referenced and used by the stored procedure.
+
+
+
+to call the procedure:
+======================
+syntax:
+-------
+  call procedurename(if any parameter);
+
+
+Ex:1
+-----
+Create a procedure to store select query to display the data from emp table.
+ 
+sol:
+===
+
+Delimiter //
+create procedure ex1()
+begin
+ select * from emp;
+end //
+
+Delimiter ; /*here restore the delimiter ; back*/
+
+to call procedure:
+===================
+call ex1();
+
+to display all the procedure from database:
+===========================================
+show procedure status where db='database';
+
+ex:
+===
+
+
+to drop procedure:
+==================
+drop procedure  databasename.procedure_name
+
+or 
+
+use database;
+
+drop procedure procedure_name;
+
+
+Ex2:
+====
+
+create a procedure named as ex2 and to store the query to display the emp records
+where depnto 10,20 or 30 using in parameter
+
+sol:
+====
+Delimiter //
+create procedure ex2(in dno decimal)
+begin
+select * from emp where deptno=dno;
+end //
+
+delimiter ;
+
+to call procedure:
+==================
+
+call ex2(10);
+call ex2(20);
+call ex2(30);
+
+Ex3:
+----
+create a procedure named as ex3 to store max(sal) into out parameter from emp table.
+
+sol:
+====
+
+Delimiter //
+
+create procedure ex3(out ms decimal)
+begin
+
+select max(sal) into ms from emp;
+
+end //
+
+delimiter ;
+
+to call procedure with out parameter 
+=====================================
+call ex3(@s);  /*when call the procedure it will return out parameter or variable 					value,then we need to store that value into a variable).*/
+select @s ;
+
+
+Exercise:
+---------
+write a procedure to display the ename(out)  of empno 7566(IN);
+
+sol:
+====
+delimiter //
+create procedure ex4(in eno int,out en varchar(15))
+begin
+select ename into en from emp where empno=eno;
+end //
+
+delimiter ;
+
+-----------------
+call ex4(7566,@n);
+
+select @n;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ex:
+====
+write a procedure to perfrom sum of two numbers(two -IN) and return sum(OUT)
+
+sol:
+----
+delimiter //
+create procedure ex_sum(IN a int,IN b int,OUT c int)
+begin
+set c=a+b;
+end //
+
+delimiter ;
+
+----------------
+call ex_sum(10,30,@st)
+
+select @st
+
+
+Ex4:
+-----
+write a procedure to get ename of empno=7566 and display it.
+
+sol:
+----
+delimiter //
+
+create procedure ex_en(in eno decimal,out en varchar(10))
+begin
+
+select ename into en from emp where empno=eno;
+
+end //
+
+delimiter ;
+
+---------------
+call ex_en(7566,@vn);
+
+select @vn
+
+
+
+ex4:
+====
+create procedure named as ex4 to store max(sal) int to outparameter from emp
+where deptno 10 or 20 or 30 using in,out paramter
+
+sol:
+----
+delimiter //
+
+create procedure ex4(in dno decimal,out ms decimal)
+begin
+
+select max(sal) into ms from emp where deptno=dno;
+
+end //
+delimiter ;
+
+to call procedure:
+==================
+call ex4(10,@tn);
+select @tn;
+
+call ex4(20,@tn);
+select @tn;
+
+call ex4(30,@tn);
+select @tn;
+
+
+Ex5:
+----
+create a procedure named as ex5 to store max(sal) from emp
+where deptno 10 or 20 30 using INOUT parameter
+sol:
+----
+Delimiter //
+
+create procedure ex5(inout v_n decimal)
+begin
+select max(sal) into v_n from emp where deptno=v_n;
+end //
+
+delimiter ;   /*to restore delimiter from // to ;*/
+
+to call the procedure:
+======================
+set @n=10;  /*it will act as input parameter */
+
+call ex5(@n);  
+
+select @n;
+
+     
+
+select @n;     /*it will act as output parameter*/
+
+--------------
+set @n=20
+
+call ex5(@n);
+
+select @n;
+
+
+Ex6:
+----
+Create a procedure to declare local variable 
+initialize and display it.
+
+sol:
+---
+delimiter //
+create procedure ex6()
+begin
+declare a int;
+declare b varchar(10);   /*declaration of variables */
+declare c float;
+
+set a=10;
+set b='welcome';        /*initialization variable using set keyword*/
+set c=300;    
+
+select a,b,c;           /*display*/
+end //
+
+delimiter ;
+to call the procedure:
+----------------------
+call ex6();
+
+
+conditional or control statement:
+=================================
+if:
+---
+if condition then
+  statement-1;
+end if;
+
+
+if-else:
+--------
+
+syntax:
+-------
+
+if condition then
+  statement-1;
+else
+  statement-2;
+
+end if;
+
+
+Ex:
+---
+create a procedure to compare two integer variables
+display which is greater  using in parameter.
+
+sol:
+-----
+delimiter //
+create procedure ex7(in a int,in b int)
+begin
+
+declare msg varchar(20);
+
+if a > b then
+set msg='a is greater than b';
+else
+set msg='b is greater than a';
+end if; 
+
+select msg;
+
+end //
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sol:
+===
+Delimiter //
+create procedure ex7(in a int,in b int)
+
+begin
+declare msg varchar(30);
+
+if a>b then
+   set msg='a is greater than b';
+else
+   set msg='b is greater than a';
+end if;
+
+select msg;
+
+end //
+
+delimiter ;
+
+
+to call procedure:
+------------------
+call ex7(10,5)  ;   
+
+call ex7(1,5) ;
+
+
+Ex:
+---
+if-else-if:
+-----------
+
+syntax:
+-------
+
+if condition then
+  statement-1;
+elseif condition then
+  statement-2;
+elseif condition then
+  statement-3;
+else 
+  statement-4;
+
+end if;
+
+ex:
+---
+create a procedure to compare three integer variables
+display which is greater  using in parameter and if-else-if.
+
+
+   
+
+
+
+
+sol:
+---
+Delimiter //
+
+create procedure ex8(in a int,in b int,in c int)
+begin
+
+declare msg varchar(30);
+
+if a>b and a>c then
+   set msg='a is greater than b,c';
+
+elseif b>c and b>a then
+   set msg='b is greater than a,c';
+
+else
+   set msg='c is greater than a,b';
+
+end if;
+
+select msg;
+
+end //
+
+delimiter ;
+
+to call procedure:
+==================
+call ex8(10,5,1);
+
+call ex8(5,10,2);
+
+cal ex8(5,1,7);
+
+
+Exercises:
+=========
+1)create a procedure named as ex9 to perform sum of two number 
+using in parameters.
+sol:
+----
+delimiter //
+
+create procedure ex_9(in n1 int,in n2 int)
+begin
+
+declare res int;
+
+set res=n1+n2;
+
+select res;
+
+end //
+
+delimiter ;
+
+to call procedure:
+------------------
+call ex_9(10,10);
+
+
+2)create a procedure named as ex10 to perform sum of two number 
+using in parameters and out parameter
+
+sol:
+----
+delimiter //
+
+create procedure ex10(in n1 int,in n2 int,out res int)
+begin
+
+set res=n1+n2;
+
+end //
+
+delimiter ;
+
+
+to call procedure:
+==================
+call ex10(10,30,@rs);
+
+select @rs;
 
 
 
