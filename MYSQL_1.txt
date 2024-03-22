@@ -3821,4 +3821,717 @@ call ex10(10,30,@rs);
 select @rs;
 
 
+Function:
+---------
+In MySQL, a function is a stored program that you can pass parameters into and then return a value.
 
+Just as you can create functions in other languages, you can create your own functions in MySQL.
+
+Syntax
+-------
+   
+The syntax to create a function in MySQL is:
+--------------------------------------------
+DELIMITER //  
+
+CREATE FUNCTION function_name [ (parameter datatype [, parameter datatype]) ]
+RETURNS return_datatype
+
+DETERMINISTIC
+
+BEGIN
+
+   declaration_section
+
+   executable_section
+   return datatype;
+
+
+END;
+
+DELIMITER //  
+
+function_name
+--------------
+The name to assign to this function in MySQL.
+
+parameter
+----------
+One or more parameters passed into the function. When creating a function, 
+all parameters are considered to be IN parameters (not OUT or INOUT parameters) 
+where the parameters can be referenced by the function but can not be overwritten by the function.
+
+return_datatype
+----------------
+The data type of the function's return value.
+
+declaration_section
+--------------------
+The place in the function where you declare local variables.
+
+executable_section
+------------------
+The place in the function where you enter the code for the function.
+
+DETERMINISTIC:
+--------------
+it means the function will return the same values if the same arguments are supplied to it.
+
+
+to call function:
+==================
+
+select function_name(if any parameters pass the value);
+
+
+Ex:
+---
+create a function named as addition which takes three parameters
+and perform sum of three numbers and return it
+
+sol:
+----
+
+delimiter //
+create function addition(a int,b int,c int)
+returns int
+
+DETERMINISTIC
+
+begin
+
+return (a+b+c);
+
+end //
+
+delimiter ;
+
+to call the function:
+----------------------
+select addition(10,20,30);   //it will return 60;
+
+or
+---
+create table test1(a int,b int,c int);
+insert into test1 values(10,30,50);
+
+select addition(a,b,c) from test1;
+
+
+
+to drop function:
+-----------------
+drop function function_name;
+
+note:
+-----
+function name should be userdefined name.
+(Don't use predefined function names like string functions,date functions,number functions etc).
+
+
+Ex:
+---
+create a function which returns the max(sal) from emp table.
+
+sol:
+----
+
+delimiter //
+
+create function ms() /*default funtion*/
+returns decimal
+
+DETERMINISTIC
+
+begin
+
+declare v_m decimal;
+
+select max(sal) into v_m from emp;
+
+return v_m;
+
+end //
+
+delimiter ;
+
+to call the function:
+=====================
+select ms() as maximumSal;
+
+
+Exercise:
+---------
+create a function to display welcome 'ename' from emp table
+when pass a ename column it should print welcome smith...etc
+
+sol:
+====
+delimiter //
+
+create function concat_en(n varchar(10))
+returns varchar(20)
+
+DETERMINISTIC
+
+begin
+
+declare en varchar(20);
+  
+set en=concat('welcome ',n);
+
+return en;
+
+end //
+
+delimiter ;
+
+
+to call the function:
+=====================
+
+select concat_en(ename) from emp;
+
+select concat_en(' Rajukumar');
+
+
+
+
+
+
+TRIGGERS:
+=========
+
+A Trigger in MySQL is a special kind of stored operation that gets invoked automatically when an event has 
+occurred in the database.
+
+It is a database object which is related to a table in the database and becomes active when a defined MySQL 
+statement is initiated on the table. 
+
+These DML (Data Manipulation Language) execution operations can be INSERT, DELETE, UPDATE and triggers 
+can be called before or after these events.
+
+A trigger is a set of actions that are run automatically when a specified change operation 
+(SQL INSERT, UPDATE, or DELETE statement) is performed on a specified table. 
+Triggers are useful for tasks such as enforcing business rules, validating input data, and keeping an audit trail.
+
+
+For example when a row is inserted to a table or when any columns are modified, a trigger can be fired. 
+Mostly, triggers can are made to run whenever any alterations are done to the data of a table. 
+
+Triggers are simply a SQL code to run before or just after any DML action events on a particular table in a database.
+
+
+Syntax
+-------
+
+CREATE
+[DEFINER = user] TRIGGER trigger_name
+trigger_time trigger_event
+ON tbl_name 
+FOR EACH ROW
+trigger_body
+
+trigger_time: { BEFORE | AFTER }
+trigger_event: { INSERT | UPDATE | DELETE }
+
+
+Parameters
+------------
+DEFINER clause:
+---------------
+ Identifies the MySQL account that is used for access at trigger initiation time.
+
+trigger_name:
+-------------
+The name of all triggers should be unique inside a schema.
+
+trigger_time: 
+-------------
+Defines the trigger action time which can be either before or after any row affected.
+
+trigger_event: 
+--------------
+Specifies the type of operation to activate the trigger.
+
+tbl_name: 
+---------
+The table name should be of a permanent table not a temporary or a view table to associate a trigger.
+
+trigger_body: 
+-------------
+It is used to display a statement when the trigger is fired. 
+The compound statement construct BEGIN … END can be used to complete many statements.
+
+
+Types of Trigger in MYSQL
+=========================
+Two types of triggers are defined by the SQL standard:
+
+Row-Level Trigger: 
+=================
+It is executed when each row is affected by insertion, updation and deletion actions on a table. 
+Like if you have a table and 50 rows are inserted, updated or deleted, then automatically the trigger
+is also invoked for 50 times.
+
+Statement-Level Trigger: 
+======================
+This trigger is invoked only once for a transaction regardless of the number of rows inserted, updated, or deleted.
+
+note:
+=====
+Row-Level Trigger is supported in MySQL but not Statement-Level Trigger.
+
+
+PSEUDO COLUMNS:
+===============
+
+NEW:- IT REPRESENT NEW VALUES FOR A COLUMNS OF A TABLE 
+
+OLD :- IT REPRESNT OLD VALUES FOR A COLUMNS OF A TABLE.
+
+
+full syntax:
+============
+delimiter //
+
+create trigger trigger_name
+
+{before/after} 
+
+[insert or update or delete] on table_name
+
+for each row
+
+begin 
+
+statment; or logic;
+
+end //
+
+delimiter //
+
+
+Example:
+========
+1) create a table named as emp13(empno,ename,sal)
+2) create a trigger  before insert into emp13 covert the ename into capital letter.
+3) perform multiple insert to check trigger is fired or not?
+
+
+
+
+sol:
+----
+
+1)create table emp13(empno int(4),ename varchar(10),sal decimal(7));
+
+2)
+
+delimiter //
+
+create trigger trg_emp_13
+before insert on emp13
+for each row
+begin
+
+set New.ename=upper(New.ename);
+
+end //
+
+delimiter ;
+
+3)
+insert into emp13 values(101,'ramu',3000);
+
+
+Example:
+--------
+1)create table emp14(empno int,ename varchar(10),sal decimal(10,2));
+
+2)create table messag(msg varchar(30));
+
+trigger:
+--------
+delimiter //
+
+ create trigger trg_emp_14     
+    before insert on emp14
+    for each row
+    begin
+    
+insert into messag values('insert trigger fired on emp14');
+ end //
+
+3) insert the record into emp14
+insert into emp14 values(101,'smith',4000),(102,'rahu',3000);
+
+
+Example:
+----------
+write a trigger on emp15 table before insert  into empno column append PU_ to empno.
+insert into emp15 values(5010,'smith',3000);
+
+select * from emp15;
+
+PU_5010 smith 3000
+
+sol:
+----
+1)create table emp15(empno varchar(10),ename varchar(10),sal decimal);
+
+2)
+delimiter //
+ create trigger trg_emp_15     
+    before insert on emp15
+    for each row
+    begin
+    set New.empno=concat('PU_',New.empno);
+  end //
+
+  delimiter ;
+
+3)
+insert into emp15 values('5010','smith',3000);
+
+select *  from emp15
+
+
+
+
+
+Exercise:
+=========
+1)create table studentdetails(sid int(4),sname varchar(10),m1 int(3),m2 int(3),m3 int(3),total int(5));
+
+2)create trigger on studentdetails before insert to table it should calculate sum of m1+m2+m3 and store in total column
+
+sol:
+----
+1) create table studentdetails(sid int(4),sname varchar(10),m1 int(3),m2 int(3),m3 int(3),total int(5));
+
+2)
+delimiter //
+create trigger trg_sd
+before insert on studentdetails
+for each row
+begin
+set New.total=New.m1+New.m2+New.m3;
+end //
+
+delimiter ;
+
+3) insert into studentdetails (sid,sname,m1,m2,m3) values (1,'Rahul',60,60,70);
+select * from studentdetails;
+
+1 Rahul 60 60 70  190
+
+
+
+execute insert
+==============
+mysql> insert into studentdetails (sid,sname,m1,m2,m3) values
+    -> (101,'rahul',60,70,80);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from studentdetails;
++------+-------+------+------+------+-------+
+| sid  | sname | m1   | m2   | m3   | total |
++------+-------+------+------+------+-------+
+|  101 | rahul |   60 |   70 |   80 |   210 |
++------+-------+------+------+------+-------+
+1 row in set (0.00 sec)
+
+
+
+Example:
+--------
+bank audting
+
+1)create a table emp_base(empno,ename,sal): --original table
+
+sol:  
+  create table emp_base(empno int(4),ename varchar(10),sal int(8));
+
+  insert into emp_base(1001,'smith',3000);
+
+
+2)create a backup table named as           --to maintain history  emp_base_update(empno,n_ename,o_ename,n_sal,o_sal,operat,ondate):
+
+sol:
+  create table emp_base_update_bkup(empno int(4),n_ename varchar(10),
+             o_ename varchar(10),n_sal int(8),o_sal int(8),opera varchar(10),ef_ondate date);
+
+
+3)create a trigger before update an record in emp_base table insert that record into emp_base_update(history,new value).
+
+sol:
+----
+
+delimiter //
+
+create trigger trg_adut_emp_base
+before update on emp_base
+for each row
+begin
+
+insert into emp_base_update (empno,n_ename,o_ename,n_sal,o_sal,opera,ef_ondate) values
+                  (old.empno,new.ename,old.ename,new.sal,old.sal,'update',current_date());
+
+end //
+
+delimiter ;  
+
+Execute:
+--------
+mysql> update emp_base set ename='martin',sal=5000 where empno=1001;
+
+mysql> select * from emp_base;
++-------+--------+------+
+| empno | ename  | sal  |
++-------+--------+------+
+|  1001 | martin | 5000 |
++-------+--------+------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from emp_base_update;
++-------+---------+---------+-------+-------+--------+------------+
+| empno | n_ename | o_ename | n_sal | o_sal | opera  | ef_ondate  |
++-------+---------+---------+-------+-------+--------+------------+
+|  1001 | martin  | smith   |  5000 |  3000 | update | 2021-03-05 |
++-------+---------+---------+-------+-------+--------+------------+
+1 row in set (0.00 sec)
+
+
+
+Exercise:
+--=======
+1)create a table emp_base(empno,ename,sal)
+  
+  create table emp_base(empno int(4),ename varchar(10),sal int(8));
+
+  insert five records.
+
+
+2)create a backup table named as emp_base_delete(empno,ename,opera,ondate);
+
+create table emp_base_delete( empno int(4),ename varchar(10),sal int(8),opera varchar(10),ef_ondate data);
+
+
+3) create a trigger before delete a record from emp_base,the deleted record should backup into emp_base_delete table.
+
+sol:
+----
+
+
+delimiter //
+
+create trigger trg_adut_emp_del
+before delete on emp_base
+for each row
+begin
+
+insert into emp_base_delete(empno,ename,sal,opera,ef_ondate) values
+     (old.empno,old.ename,old.sal,'delete',current_date());
+                
+end //
+
+delimiter ;
+
+
+Execute:
+========
+mysql> delete from emp_base where empno=1005;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp_base;
++-------+--------+------+
+| empno | ename  | sal  |
++-------+--------+------+
+|  1001 | john   | 6000 |
+|  1002 | laxmi  | 5000 |
+|  1003 | ramesh | 2000 |
+|  1004 | raj    | 1000 |
++-------+--------+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp_base_delete;
++-------+-------+------+--------+------------+
+| empno | ename | sal  | opera  | ef_ondate  |
++-------+-------+------+--------+------------+
+|  1005 | sumit | 4000 | delete | 2021-03-05 |
++-------+-------+------+--------+------------+
+1 row in set (0.00 sec)
+
+mysql>
+
+
+
+to drop a trigger:
+==================
+drop trigger trigger_name;
+
+
+to list all trigger on table:
+=============================
+show triggers from database_name where `table`='tablename'
+
+here we need to use back quote(`)
+ex:
+---
+show triggers from parul where `table`='emp_base';
+
+or
+
+show triggers;
+
+MySQL DATE functions
+---------------------
+MySQL supports a bunch of date utility functions that we can use to handle DATE efficiently.
+
+NOW()
+------
+This date function returns the current date and time of the running server instance.
+
+-- Print current date and time in MySQL
+SELECT NOW();
+
+DATE()
+--------
+This date function extracts and returns the date part from the given DATETIME value.
+
+-- Print date part from current date and time in MySQL
+SELECT DATE(NOW());
+
+CURDATE()
+----------
+It is a simple date function that fetches the current date of the system running the MySQL instance.
+
+-- Print the current date in MySQL
+SELECT CURDATE();
+
+DATE_FORMAT():
+--------------
+Sometimes you need to display a date in a user-defined style. For example, you want to show the month first, then the date, and the year in the last.
+
+-- Print the current MySQL date in a user-defined format
+
+SELECT DATE_FORMAT(DATE(NOW()), '%m_%d_%Y') Styled_date;
+
+
+DATEDIFF():
+------------
+You may want to count the difference between the two dates. 
+Therefore, you can use the DATEDIFF() function.
+
+
+-- Print the difference between two dates
+
+SELECT DATEDIFF('2019-08-04','2019-08-01') diff;
+
+Note:
+-----
+The DATEDIFF() function would subtract the second date argument from the first and return the diff in days.
+
+i.e 3
+
+
+DATE_ADD():
+-------------
+It enables you to add any of the days, weeks, months, or years to a given date. Check the below example.
+
+-- Adding days, weeks, months, and years using DATE_ADD()
+
+SELECT 
+    '2019-08-04' ACTUAL,
+    DATE_ADD('2019-08-04', INTERVAL 1 DAY) 'Added 1 day',
+    DATE_ADD('2019-08-04', INTERVAL 1 WEEK) 'Added 1 week',
+    DATE_ADD('2019-08-04', INTERVAL 1 MONTH) 'Added 1 month',
+    DATE_ADD('2019-08-04', INTERVAL 1 YEAR) 'Added 1 year';
+
+similary we have DATE_SUB()
+
+EXTRACT():
+----------
+The EXTRACT function will extract a part of a date from a specified date value.
+
+EXTRACT(unit FROM date)
+It uses the same unit specifiers as other date functions such as DATE_ADD and DATE_SUB.
+
+SELECT EXTRACT(DAY FROM '2020-08-04');
+SELECT EXTRACT(MONTH FROM '2020-08-04');
+SELECT EXTRACT(YEAR FROM '2020-08-04');
+SELECT EXTRACT(YEAR_MONTH FROM '2020-08-04');
+
+
+
+
+Specifier	Description
+---		-----------
+%a		Abbreviated weekday name (Sun..Sat)
+
+%b		Abbreviated month name (Jan..Dec)
+
+%c		Month, numeric (0..12)
+
+%D		Day of the month with English suffix (0th, 1st, 2nd, 3rd, …)
+
+%d		Day of the month, numeric (00..31)
+
+%e		Day of the month, numeric (0..31)
+
+%f		Microseconds (000000..999999)
+
+%H		Hour (00..23)
+
+%h		Hour (01..12)
+
+%I		Hour (01..12)
+
+%i		Minutes, numeric (00..59)
+
+%j		Day of year (001..366)
+
+%k		Hour (0..23)
+
+%l		Hour (1..12)
+
+%M		Month name (January..December)
+
+%m		Month, numeric (00..12)
+
+%p		AM or PM
+
+%r		Time, 12-hour (hh:mm:ss followed by AM or PM)
+
+%S		Seconds (00..59)
+
+%s		Seconds (00..59)
+
+%T		Time, 24-hour (hh:mm:ss)
+
+%U		Week (00..53), where Sunday is the first day of the week; WEEK() mode 0
+
+%u		Week (00..53), where Monday is the first day of the week; WEEK() mode 1
+
+%V		Week (01..53), where Sunday is the first day of the week; WEEK() mode 2; used with %X
+
+%v		Week (01..53), where Monday is the first day of the week; WEEK() mode 3; used with %x
+
+%W		Weekday name (Sunday..Saturday)
+
+%w		Day of the week (0=Sunday..6=Saturday)
+
+%X		Year for the week where Sunday is the first day of the week, numeric, 			four digits; used with %V
+
+%x		Year for the week, where Monday is the first day of the week, numeric, four digits; 
+		used with %v
+
+%Y		Year, numeric, four digits
+
+%y		Year, numeric (two digits)
+
+%%		A literal % character
+
+%x		x, for any “x” not listed above
