@@ -1,0 +1,56 @@
+Basic Unix Commands required for production support
+1)cal
+2)cd
+3)chmod
+4)cp
+5)date
+6)df
+7)du
+8)find
+9)ifconfig
+10)jobs
+11)kill
+12)less and more
+13)lpr and lp
+14)ls
+15)man
+16)mkdir
+17)mv
+18)ps
+19)pwd
+20)rm
+21)rmdir
+22)set
+23)w and who
+24)who am i
+25)tail
+26)head
+27)cut
+28)sort
+29)merge
+30)paste
+31)curl
+32)tree
+33)uname
+35)tty
+36)id
+37)sudo
+38)grep, fgrep
+39)AWK
+40)SED
+
+text Editors commands:
+------------------------
+cat
+vi
+nano
+
+to schedule the script:
+------------------------
+corntab --- command
+
+
+
+
+
+
