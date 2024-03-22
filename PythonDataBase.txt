@@ -1,0 +1,522 @@
+Python Database Programming:
+============================
+Sometimes as the part of Programming requirement we have to connect to the 
+database and we have to perform several operations like creating tables, inserting 
+data, updating data, deleting data, selecting data etc.
+
+We can use SQL Language to interact with the database and we can use Python to send 
+SQL commands to the database.
+
+Python provides inbuilt support for several databases like Oracle(cx_Oracle), MySql(myql.connnector), SqlServer,
+GadFly, sqlite, etc.
+
+Python has seperate module for each database. 
+
+Eg: cx_Oralce module for communicating with Oracle database
+ mysql.connector module for communicating with Mysql database
+
+
+install the mysql library using pip :
+----------------------------------------
+pip install mysql-connector-pyhton
+
+
+
+Standard Steps for Python database Programming:
+===============================================
+1) Import database specific module 
+
+ Eg: import mysql.connector
+
+2) Establish Connection between Python Program and database.
+ We can create this Connection object by using connect() function of the module.
+
+ con = mysql.connector.connect(datbase information)
+
+Eg: con =    mysql.connector.connect(host='localhost',database='test',user='root','root')
+
+3) To execute our sql queries and to hold results some special object is required, which is nothing but 
+Cursor object.
+
+We can create Cursor object by using cursor() method.
+
+cursor = con.cursor()
+
+4) Execute SQL Queries By using Cursor object. 
+
+For this we can use the following methods
+
+execute(sqlquery) ->To execute a Single SQL Query
+
+executescript(sqlqueries) ->To execute a String of SQL Queries seperated by semicolon';'
+
+executemany()->To execute a Parameterized Query.
+
+Eg: cursor.execute("select * from employees")
+
+5) Commit OR Rollback changes based on our requirement in the case of DML Queries
+(insert|update|delete)
+ 
+ commit() -> Saves the changes to the database
+ rollback() -> rolls all temporary changes back
+
+6) Fetch the result from the Cursor object in the case of select queries:
+ fetchone() -> To fetch only one row
+ fetchall() -> To fetch all rows and it returns a list of rows
+ fecthmany(n) -> To fetch first n rows 
+
+7) Close the Resources:
+After completing our operations it is highly recommended to close the resources in the 
+reverse order of their opening by using close() methods.
+
+ cursor.close()
+ con.close()
+
+
+Ex1:Program to Connect with Oracle Database and print 
+
+import mysql.connector
+con = mysql.connector.connect(host='localhost',database='training',user='root',password='root')
+print(con)
+con.close()
+
+Ex2:
+Write a Program to Create product Table in the Database
+product(pid,pname,price)
+
+sol:
+----
+import mysql.connector
+con = ''
+cursor=''
+try:
+    con = mysql.connector.connect(host='localhost',database='test',user='root',password='root')
+    cursor=con.cursor()
+    query="create table product(pid int,pname varchar(10),price float)"
+    cursor.execute(query)
+    print("Table created successfully")
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+Ex:3 ->Write a Program to Insert a Single Row in to table.
+
+import mysql.connector
+con = ''
+cursor=''
+try:
+    con = mysql.connector.connect(host='localhost',database='test',user='root',password='root')
+    cursor=con.cursor()     
+    cursor.execute("insert into product values(101  ,'mouse',300)")
+    con.commit() #mandatory
+    print("Record Inserted Successfully")
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+Ex:4 ->Write a Program to Insert Multiple Rows in to the Product Table by using executemany() Method
+
+import mysql.connector
+con = ''
+cursor=''
+try:
+    con = mysql.connector.connect(host='localhost',database='training',user='root',password='root')
+    cursor=con.cursor()
+    sql = "insert into product values(%s,%s,%s)"
+    records = [(201, 'keyboard',800),(203,'monitor',5000),(204,'pendrive',800)]
+    cursor.executemany(sql, records)
+    con.commit()
+    print("Multiple Records Inserted Successfully")
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+Ex:5 ->  Write a Program to Insert Multiple Rows in the Product
+               Table with Dynamic Input from the Keyboard?
+
+import mysql.connector
+con = ''
+cursor=''
+try:
+    con = mysql.connector.connect(host='localhost',database='test',user='root',password='root')
+    cursor=con.cursor()
+    while True:
+        pid = int(input("Enter Product Id:"))
+        pname = input("Enter Product Name:")
+        price = float(input("Enter Product Price:"))
+        sql = "insert into product values(%d,'%s',%f)"
+
+        cursor.execute(sql % (pid, pname, price))
+
+        print("Record Inserted Successfully")
+        option = input("Do you want to insert one more record[Yes|No] :")
+        if option == "No" or option == "no":
+            con.commit()
+            break
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+Ex:6 Update a record
+
+import mysql.connector
+con = ''
+cursor = ''
+try:
+    con = mysql.connector.connect(host='localhost',database='training',user='root',password='root')
+    cursor = con.cursor()
+    sql = "update product set pname='charge' where pid=205"
+    cursor.execute(sql)
+    print("Records Updated Successfully")
+    con.commit()
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+Ex:7
+Write a Program to Select all product info by using fetchone() Method?
+
+import mysql.connector
+con = ''
+cursor = ''
+try:
+    con = mysql.connector.connect(host='localhost',database='test',user='root',password='root')
+    cursor = con.cursor()
+    cursor.execute("select * from product")
+    row = cursor.fetchone()
+    while row is not None:
+        print(row)
+        row = cursor.fetchone() #increment for second record......
+
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+Ex:8 
+import mysql.connector
+con = ''
+cursor = ''
+try:
+    con = mysql.connector.connect(host='localhost',database='training',user='root',password='root')
+    cursor = con.cursor()
+    cursor.execute("select * from product")
+    data = cursor.fetchall()
+    for row in data:
+        print("Product Id:", row[0])
+        print("Product Name:", row[1])
+        print("Product Price:", row[2])
+        print()
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+
+
+
+
+
+import mysql.connector
+con = ''
+cursor = ''
+try:
+    con = mysql.connector.connect(host='localhost',database='training',user='root',password='root')
+    cursor = con.cursor()
+    cursor.execute("select * from product")
+    data = cursor.fetchmany(3)
+    for row in data:
+        print("Product Id:", row[0])
+        print("Product Name:", row[1])
+        print("Product Price:", row[2])
+        print()
+except mysql.connector.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+to work with sqllite:
+=====================
+
+
+import sqlite3
+
+con = sqlite3.connect("C:\\data\\tables.sqlite")
+print(con)
+
+con.close()
+
+
+
+Ex2:
+Write a Program to Create product Table in the Database sqlite3
+product(pid,pname,price)
+
+sol:
+----
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    query="create table product(pid int,pname varchar(10),price float)"
+    cursor.execute(query)
+    print("Table created successfully")
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+Ex:3 ->Write a Program to Insert a Single Row in to table.
+soL:
+----
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    query="insert into product values(1001,'mouse',300)"
+    cursor.execute(query)
+    print("insert record successfully")
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+Ex:4 ->Write a Program to fetch a Single Row from table.
+
+
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    query="select * from product"
+    cursor.execute(query)
+    row = cursor.fetchone()
+    print(row)
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+Ex:5 ->Write a Program to multiple Insert in to table.
+
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    query="insert into product values(?,?,?)"
+    row=[(201,'ram',3000),(202,'pendrve',800)]
+    cursor.executemany(query,row)
+    con.commit()
+    print("Multiple records successfully")
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+
+
+Ex:4 ->Write a Program to fetch a all records from table (fetchall()).
+
+
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    query=("select * from product")
+    cursor.execute(query)
+    data =cursor.fetchall()
+    for row in data:
+        print("product id is : ",row[0])
+        print("product Name is : ", row[1])
+        print("product Price is : ", row[2])
+    print("Multiple records successfully")
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+Ex:5
+Write a Program to Insert Multiple Rows in the Product
+               Table with Dynamic Input from the Keyboard?
+
+
+import sqlite3
+con = ''
+cursor=''
+try:
+    con = sqlite3.connect("C:\\data\\tables.sqlite")
+    cursor=con.cursor()
+    pid=int(input("Enter the ProductID"))
+    pname=input("Enter the productName")
+    price=float(input("Enter the product Price"))
+
+    query="insert into product values(%d,'%s',%f)"
+    cursor.execute(query %(pid,pname,price))
+
+    con.commit()
+    print("Record inserted successfully")
+except sqlite3.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+
+Ex:
+===
+Write a Program to delete a Rows in the Product
+               Table with Dynamic Input from the Keyboard using pid?(mysql)
+
+syntax: delete from tablename where coluname=data;
+sol:
+----
+import mysql.connector as mysql
+con = ''
+cursor=''
+try:
+    con =mysql.connect(host='localhost',database='test',user='root',password='root')
+    cursor=con.cursor()
+    pid=int(input("Enter the ProductID"))
+
+    query="delete from product where pid=%d"
+    cursor.execute(query %(pid))
+
+    con.commit()
+    print("Deleted successfully")
+except mysql.DatabaseError as e:
+    if con:
+        con.rollback()
+        print("There is a problem with sql", e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+        print("connection is closed")
+
+
+
+
+
+
+
+  
