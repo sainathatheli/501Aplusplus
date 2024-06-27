@@ -1,0 +1,1067 @@
+Django Project Folder(Helloworld):
+---------------------------------
+1)__init__.py:
+
+It is a blank python script. Because of this special file name, Django treated this folder as 
+python package.
+
+Note: If any folder contains __init__.py file then only that folder is treated as Python 
+package. But this rule is applicable until Python 3.3 Version.
+
+2)settings.py:
+
+In this file we have to specify all our project settings and and configurations like
+installed applications, middleware configurations, database configurations etc
+
+3)urls.py:
+Here we have to store all our url-patterns of our project.
+For every view (web page), we have to define separate url-pattern. End user can use 
+url-patterns to access our webpages.
+
+4)wsgi.py:
+wsgi -> Web Server Gateway Interface. 
+We can use this file while deploying our application in production on online server.
+
+5)manage.py:
+The most commonly used python script is manage.py
+It is a command line utility to interact with Django project in various ways like to run 
+development server, run tests, create migrations etc.
+
+Django ApplicationFolder(firstApp):
+------------------------------------
+
+1) __init__.py:
+It is a blank Python script. Because of this special name,Python treated this folder as a 
+package.
+
+2) admin.py:
+We can register our models in this file. Django will use these models with Django's 
+admin interface.
+
+3) apps.py:
+ In this file we have to specify application's specific configurations.
+4) models.py:
+ In this file we have to store application's data models.
+
+5) tests.py:
+ In this file we have to specify test functions to test our code.
+
+6) views.py:
+In this file we have to save functions that handles requests and return required 
+responses.
+
+7) Migrations Folder:
+ This directory stores database specific information related to models
+
+
+Django Templates And Static Files
+---------------------------------
+Django Templates:
+
+It is not recommended to write html code inside python script (views.py file) 
+because:
+1) It reduces readability because Python code mixed with html code
+2) No separation of roles. Python developer has to concentrate on both python code and 
+HTML Code.
+3) It does not promote reusability of code
+
+We can overcome these problems by separating html code into a separate html file. This 
+html file is nothing but template.
+
+From the Python file (views.py file) we can use these templates based on our 
+requirement.
+
+We have to write templates at project level only once and we can use these in multiple
+applications.
+
+
+
+
+templates:
+---------
+<!DOCTYPE html> 
+<html lang="en" dir="ltr"> 
+<head> 
+<meta charset="utf-8"> 
+<title>First Template Page</title> 
+<style > 
+h1{ 
+color:white; 
+background: red; 
+} 
+</style> 
+</head> 
+<body> 
+<h1>Hello Server Current Date and Time : <br> 
+{{insert_date}} 
+</h1> 
+</body> 
+</html>
+
+view.py
+-------
+def wish(request):
+    date=datetime.datetime.now()
+    my_dict={'insert_date':date}
+    return render(request,'wish.html',context=my_dict) 
+
+
+
+
+Application To display date, time and student information:
+===========================================================
+views.py
+--------
+
+from django.shortcuts import render 
+
+import datetime 
+ 
+# Create your views here. 
+def template_view(request): 
+	dt=datetime.datetime.now() 
+	name='SMITH' 
+	rollno=101 
+	marks=100 
+	my_dict={'date':dt,'name':name,'rollno':rollno,'marks':marks} 
+	return render(request,'results.html',my_dict) 
+
+results.html:
+-------------
+<!DOCTYPE html> 
+<html lang="en" dir="ltr"> 
+<head> 
+<title></title> 
+<style> 
+body{ 
+background: green; 
+color:white; 
+} 
+h1{ 
+border:10px solid yellow; 
+} 
+</style> 
+</head> 
+<body> 
+<h1>Hello this response from Template File.I will take care everything about pres
+entation</h1><hr> 
+<h2>The Server Date and Time is:{{date}}</h2> 
+<ol> 
+<li>Name:{{name}}</li> 
+<li>Rollno:{{rollno}}</li> 
+<li>Marks:{{marks}}</li> 
+</ol> 
+ 
+</body> 
+</html> 
+
+
+
+Working with Models and Databases:
+----------------------------------
+As the part of web application development, compulsory we required to interact with 
+database to store our data and to retrieve our stored data.
+
+Django provides a big in-built support for database operations. Django provides one 
+inbuilt database sqlite3.
+
+For small to medium applications this database is more enough. Django can provide 
+support for other databases also like oracle, mysql,postgresql etc
+Database Configuration:
+
+Django by default provides sqlite3 database. If we want to use this database,we are 
+not required to do any configurations.
+
+The default sqllite3 configurations in settings.py file are declared as follows.
+settings.py
+1) DATABASES = { 
+2) 'default': { 
+3) 'ENGINE': 'django.db.backends.sqlite3', 
+4) 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
+5) } 
+6) } 
+
+
+Model Class: 
+============
+A Model is a Python class which contains database information.
+A Model is a single, definitive source of information about our data. It contains fields 
+and behavior of the data what we are storing.
+
+Each model maps to one database table. 
+Every model is a Python class which is the child class of (django.db.models.Model)
+Each attribute of the model represents a database field. 
+We have to write all model classes inside ‘models.py’ file. 
+
+
+models.py
+from django.db import models 
+ 
+# Create your models here. 
+class Employee(models.Model): 
+	eno=models.IntegerField() 
+	ename=models.CharField(max_length=30) 
+	esal=models.FloatField() 
+	eaddr=models.CharField(max_length=30) 
+
+Note: This model class will be converted into Database table. Django is responsible for 
+this.
+
+table_name: appName_Employee
+fields: eno, ename, esal and eaddr. And one extra field: id
+behaviors: eno is of type Integer, ename is of type Char and max_length is 30 characters. 
+Hence, Model Class = Database Table Name + Field Names + Field Behaviors
+
+Converting Model Class into Database specific SQL Code:
+--------------------------------------------------------- 
+Once we write Model class, we have to generate the corresponding SQL Code. 
+For this, we have to use “makemigrations” command. 
+
+add y
+
+Python manage.py makemigrations 
+
+
+How to see corresponding SQL Code of Migrations: 
+--------------------------------------------------
+To see the generated SQL Code, we have to use the following command “sqlmigrate”
+
+python manage.py sqlmigrate testApp 0001
+
+Note: Here 0001 is the file passed as an argument 
+
+“id” field: 
+1) For every table(model), Django will generate a special column named with “id”. 
+2) ID is a Primary Key. (Unique Identifier for every row inside table is considered as a 
+primary key).
+3) This field(id) is auto increment field and hence while inserting data, we are not 
+required to provide data for this field.
+4) This id field is of type “AutoField”
+5) We can override the behavior of “id” field and we can make our own field as “id”.
+6) Every Field is by default “NOT NULL”.
+
+How to execute generated SQL Code (migrate Command): 
+----------------------------------------------------
+After generating sql code, we have to execute that sql code to create table in database. 
+For this, we have to use ‘migrate’ command. 
+
+python manage.py migrate
+
+
+How to Check created Table in Django admin Interface: 
+-------------------------------------------------------
+We have to register model class in ‘admin.py’ file. 
+
+admin.py
+--------
+from django.contrib import admin 
+from testApp.models import Employee 
+ 
+# Register your models here. 
+ 
+admin.site.register(Employee) 
+
+
+
+
+
+Creation of Super User to login to admin Interface: 
+---------------------------------------------------
+We can create super user with the following command by providing username, mailid, 
+password. 
+python manage.py createsuperuser
+
+We can login to admin interface → Start the server and login to admin interface using 
+the created credentials. 
+
+python manage.py runserver
+
+Open the following in browser: http://127.0.0.1:8000/admin/
+
+
+
+
+
+
+
+
+
+To Display Data in admin Interface in Browser: 
+
+models.py
+---------
+from django.db import models 
+ 
+# Create your models here. 
+ 
+class Employee(models.Model): 
+	eno=models.IntegerField() 
+	ename=models.CharField(max_length=30) 
+	esal=models.FloatField() 
+	eaddr=models.CharField(max_length=30) 
+	
+	def __str__(self): 
+		return 'Employee Object with eno: +str(self.no)' 
+
+admin.py
+--------
+from django.contrib import admin 
+from testApp.models import Employee 
+ 
+#Register your models here. 
+ 
+class EmployeeAdmin(admin.ModelAdmin): 
+	list_display=['eno','ename','esal','eaddr'] 
+
+
+admin.site.register(Employee,EmployeeAdmin) 
+
+Note: 
+------
+We should do this registration in a single line otherwise we are getting error.
+admin.site.register(Employee)
+admin.site.register(EmployeeAdmin)
+
+Views.py:
+---------
+from django.shortcuts import render 
+from testApp.models import Employee 
+
+# Create your views here. 
+def empdata(request): 
+	emp_list=Employee.objects.all() 
+	my_dict={'emp_list':emp_list} 
+	return render(request, 'emp.html', context=my_dict)
+
+
+emp.html:
+---------
+<!DOCTYPE html> 
+{% load static %} 
+<html lang="en" dir="ltr"> 
+<head> 
+<meta charset="utf-8"> 
+<title></title> 
+<body> 
+<h1> The employees list is : </h1> 
+ 
+{% if emp %} 
+<table> 
+<thead> 
+<th> eno </th> 
+<th> ename </th> 
+<th> esal </th> 
+ <th> eaddr </th> 
+ </thead> 
+
+{% for e in emp %} 
+<tr> 
+<td> {{e.eno}}</td> 
+<td>{{e.ename}}</td> 
+<td>{{e.esal}}</td> 
+<td> {{e.eaddr}}</td> 
+</tr> 
+{% endfor %} 
+ 
+</table> 
+{%else%} 
+ <p> No records found </p> 
+<p> No records found </p> 
+{% endif %} 
+ 
+</body> 
+</html> 
+
+
+
+
+
+Django Forms:
+-------------
+It is the very important concept in web development.
+The main purpose of forms is to take user input.
+Eg: login form, registration form, enquiry form etc
+
+From the forms we can read end user provided input data and we can use that data 
+based on requirement. We may store in the database for future purpose. We may use 
+just for validation/authentication purpose etc
+
+Here we have to use Django specific forms but not HTML forms.
+
+Advantages of Django Forms over HTML Forms:
+1) We can develop forms very easily with python code
+2) We can generate HTML Form widgets/components (like textarea, email, pwd etc) very quickly
+3) Validating data will become very easy
+4) Processing data into python data structures like list, set etc will become easy
+5) Creation of Models based on forms will become easy etc.
+
+Process to generate Django Forms:
+--------------------------------
+Step-1: Creation of forms.py file in our application folder with our required fields.
+
+forms.py:
+---------
+from django import forms 
+class StudentForm(forms.Form): 
+	name=forms.CharField() 
+	marks=forms.IntegerField() 
+
+
+Note: name and marks are the field names which will be available in html form
+
+Step-2: usage of forms.py inside views.py file:
+----------------------------------------------
+views.py file is responsible to send this form to the template html file
+--------------------
+views.py:
+
+from django.shortcuts import render 
+from . import forms 
+ 
+# Create your views here. 
+def studentinputview(request): 
+	form=forms.StudentForm() 
+	my_dict={'form':form} 
+ 	return render(request,'input.html',context=my_dict)
+
+Note: context parameter is optional.We can pass context parameter value directly 
+without using keyword name 'context'
+
+Step-3: Creation of html file to hold form:
+Inside template file we have to use template tag to inject form {{form}}
+It will add only form fields. But there is no <form> tag and no submit button.
+Even the fields are not arranged properly
+
+input.html:
+------------
+<!DOCTYPE html> 
+{%load static%} 
+<html lang="en"> 
+<head> 
+<meta charset="utf-8"> 
+<title></title> 
+</head> 
+<body> 
+<h1>Registration Form</h1> 
+<div class="container" align="center"> 
+<form method="post"> 
+{{form.as_p}} 
+<input type="submit" class="btn btn-primary" name="" value="Submit"> 
+</form> 
+</div> 
+</body> 
+</html> 
+
+
+
+
+If we submit this form we will get 403 status code response
+Forbidden (403)
+CSRF verification failed. Request aborted.
+Help
+Reason given for failure:
+CSRF token missing or incorrect.
+
+CSRF (Cross Site Request Forgery) Token:
+--------------------------------------
+Every form should satisfy CSRF (Cross Site Request Forgery) Verification, otherwise 
+Django won't accept our form.It is meant for website security. 
+Being a programmer we are not required to worry anything about this. 
+Django will takes care everything.But we have to add csrf_token in our form
+
+
+<h1>Registration Form</h1> 
+<div class="container" align="center"> 
+<form method="post"> 
+{{form.as_p}} 
+{% csrf_token %} 
+<input type="submit" class="btn btn-primary" name="" value="Submit"> 
+</form> 
+</div> 
+
+If we add csrf_token then in the generate form the following hidden field will be 
+added, which makes our post request secure
+
+<input type='hidden' name='csrfmiddlewaretoken'
+value='1ZqIJJqTLMVa6RFAyPJh7pwzyFmdiHzytLxJIDzAkKULJz4qHcetLoKEsRLwyz4h'/>
+
+The value of this hidden field is keep on changing from request to request. Hence it is 
+impossible to forgery of our request.
+
+If we configured csrf_token in html form then only django will accept our form.
+
+
+How to process Input Data from the form inside views.py File:
+==============================================================
+We required to modify views.py file. The end user provided input is available in a 
+dictionary named with 'cleaned_data'
+
+views.py:
+------------
+from django.shortcuts import render 
+from . import forms 
+ 
+# Create your views here. 
+def studentinputview(request): 
+	form=forms.StudentForm() 
+	if request.method=='POST': 
+		form=forms.StudentForm(request.POST) 
+	if form.is_valid(): 
+		print('Form validation success and printing data') 
+		print('Name:',form.cleaned_data['name']) 
+		print('Marks:',form.cleaned_data['marks']) 
+		return render(request,'input.html',{'form':form})
+
+
+
+Student FeedBack Form Project
+------------------------------
+forms.py:
+
+from django import forms 
+class FeedBackForm(forms.Form): 
+   name=forms.CharField() 
+   rollno=forms.IntegerField() 
+   email=forms.EmailField()
+   feedback=forms.CharField(widget=forms.Textarea)
+
+
+views.py:
+---------
+from django.shortcuts import render 
+from import forms
+ 
+def feedbackview(request): 
+	form=forms.FeedBackForm() 
+	if request.method=='POST': 
+	form=forms.FeedBackForm(request.POST) 
+	if form.is_valid(): 
+		print('Form Validation Success and printing information') 
+		print('Name:',form.cleaned_data['name']) 
+		print('Roll No:',form.cleaned_data['rollno']) 
+		print('Email:',form.cleaned_data['email']) 
+		print('FeedBack:',form.cleaned_data['feedback']) 
+	return render(request,'feedback.html',{'form':form})
+
+
+feedBack.html:
+---------------
+<!DOCTYPE html> 
+{% load static %} 
+
+<html lang="en"> 
+<head> 
+<meta charset="utf-8"> 
+<title>StudentFeedBackForm</title> 
+</head> 
+<body> 
+<div class="container" align='center'> 
+<h1>Student Feedback Form</h1><hr> 
+<form class="" action="index.html" method="post"> 
+{{form.as_p}} 
+{% csrf_token %} 
+<input type="submit" class="btn btn-primary" value="Submit Feedback"> 
+</form> 
+</div> 
+</body> 
+</html> 
+
+
+
+
+
+
+Form Validations:
+-----------------
+Once we submit the form we have to perform validations like 
+1) Length of the field should not be empty
+2) The max number of characters should be 10
+3) The first character of the name should be 'd' etc
+
+We can implement validation logic by using the following 2 ways.
+1) Explicitly by the programmer by using clean methods
+2) By using Django inbuilt validators
+
+Note: All validations should be implemented in the forms.py file
+
+
+Explicitly by the Programmer by using Clean Methods:
+----------------------------------------------------
+1)The syntax of clean method: clean_fieldname(self)
+
+2)In the FormClass for any field if we define clean method then at the time of submit the 
+form, Django will call this method automatically to perform validations. 
+
+If the clean method won't raise any error then only form will be submitted.
+
+The returned value of clean method will be considered by Django at the time of 
+submitting the form.
+
+from django import forms 
+from django.core import validators 
+
+class FeedBackForm(forms.Form): 
+ name=forms.CharField() 
+ rollno=forms.IntegerField() 
+ email=forms.EmailField() 
+ feedback=forms.CharField(widget=forms.Textarea) 
+
+def clean_name(self): 
+    print('validating name') 
+    inputname=self.cleaned_data['name'] 
+    if len(inputname) < 4: 
+   raise forms.ValidationError('The Minimum no of characters in the name field
+     should be 4') 
+    return inputname+'rajy' 
+
+def clean_rollno(self): 
+inputrollno=self.cleaned_data['rollno'] 
+print('Validating rollno field') 
+return inputrollno 
+
+ def clean_email(self):
+    inputemail=self.cleaned_data['email'] 
+    print('Validating email field') 
+    return inputemail 
+ def clean_feedback(self):
+    inputfeedback=self.cleaned_data['feedback'] 
+    print('Validating feedback field') 
+    return inputfeedback 
+
+
+
+forms.py:
+---------
+from django import forms 
+from django.core import validators 
+ 
+class FeedBackForm(forms.Form): 
+name=forms.CharField() 
+rollno=forms.IntegerField() 
+email=forms.EmailField() 
+feedback=forms.CharField(widget=forms.Textarea) 
+ 
+def clean(self): 
+	print('Total Form Validation...') 
+	total_cleaned_data=super().clean() 
+	
+	inputname=total_cleaned_data['name'] 
+	if inputname[0].lower() != 'd': 
+		raise forms.ValidationError('Name parameter should starts with d') 
+	inputrollno=total_cleaned_data['rollno'] 
+	if inputrollno <=0: 
+		raise forms.ValidationError('Rollno should be > 0') 
+
+
+
+
+
+
+Note: 
+------
+1) Django will call these filed level clean methods automatically and we are not required 
+to call explicitly.
+2) Form validation by using clean methods is not recommended.
+
+
+Django's Inbuilt Core Validators:
+==================================
+Django provides several inbuilt core validators to perform very common validations. 
+We can use these validators directly and we are not required to implement.
+
+Django's inbuilt validators are available in the django.core module
+from django.core import validators
+
+To validate Max number of characters in the feedback as 40,we have to use inbuilt 
+validators as follows
+
+ from django import forms 
+ from django.core import validators 
+
+class FeedBackForm(forms.Form): 
+ name=forms.CharField() 
+ rollno=forms.IntegerField() 
+ email=forms.EmailField() 
+ feedback=forms.CharField(widget=forms.Textarea,validators=
+[validators.MaxLengthValidator(40)]) 
+
+Note:
+-----
+We can use any number of validators for the same field
+feedback = forms.CharField(widget = forms.Textarea,validators = 
+[validators.MaxLengthValidator(40),validators.MinLengthValidator(10)])
+
+
+Note: Usage of built in validators is very easy when compared with clean methods.
+
+Use Case: Custom validators(user defined message):
+--------------------------------------------------
+How to implement Custom Validators by using the same Validator Parameter:
+-------------------------------------------------------------------------
+The value of name parameter should starts with 'd' or 'D'. We can implement this 
+validation as follows:
+
+def starts_with_d(value): 
+	if value[0].lower() != 'd': 
+	  raise forms.ValidationError('Name should be starts with d | D') 
+
+class FeedBackForm(forms.Form): 
+	name=forms.CharField(validators=[starts_with_d]) 
+	rollno=forms.IntegerField() 
+
+
+
+
+
+
+
+Model Forms
+-----------
+Model Forms (Forms based on Model):
+
+Sometimes we can create form based on Model, such type of forms are called model 
+based forms or model forms.
+
+The main advantage of model forms is we can grab end user input and we can save 
+that input data very easily to the database.
+
+Django provides inbuilt support to develop model based forms very easily
+
+
+How to develop Model based Forms:
+----------------------------------
+1) While develop FormClass instead of inheriting forms.Form class,we have to inherit 
+forms.ModelForm class.
+ class RegisterForm(forms.ModelForm):
+ 
+2) We have to write one nested class (Meta class) to specify Model information and 
+required fields.
+
+class RegisterForm(forms.ModelForm):
+ # field declarations if we are performing any custom validations.If we are not defining 
+  any custom validations then here we are not required to specify any field.
+
+class Meta:
+ # we have to specify Model class name and requied fields
+ model=Student
+ fields='__all__'
+
+Case-1: 
+-------
+Instead of all fields if we want only selected fields, then we have to specify as follows
+
+class Meta:
+ 	model=Student
+ 	fields=('field1','field2','field3')
+In the form only 3 fields will be considered. 
+
+If Model class contains huge number of fields and we required to consider very less 
+number of fields in the form then we should use this approach.
+
+Case-2:
+-------
+Instead of all fields if we want to exclude certain fields,then we have to specify as follows
+
+class Meta:
+ model=Student
+ exclude=['field1','field2']
+
+In the form all fields will be considered except field1 and field2.
+
+If the Model class contains huge number of fields and if we want to exclude very few fields 
+then we have to use this approach.
+
+How to Save User's Input Data to Database in Model based Forms:
+==================================================================
+We have to use save() method.
+
+def student_view(request):
+ ...
+ if request.method=='POST':
+ 	form=RegisterForm(request.POST)
+	if form.is_valid():
+ 	form.save(commit=True)
+
+
+
+
+studentProject:
+----------------
+create studApp
+
+models.py:
+---------
+from django.db import models
+
+# Create your models here.
+class Student(models.Model):
+    name=models.CharField(max_length=30) 
+    marks=models.IntegerField()
+
+
+admin.py:
+----------
+from django.contrib import admin
+from studApp.models import Student
+# Register your models here.
+
+
+admin.site.register(Student)
+
+add the  your studApp app in setting.py installed[] 
+
+Python manage.py makemigrations
+
+python manage.py sqlmigrate studApp 0001
+
+Python manage.py migrate
+
+
+
+forms.py:
+---------
+from django import forms 
+from studApp.models import Student
+
+class StudentForm(forms.ModelForm): 
+ #fields with validations
+    class Meta:
+        model=Student
+        fields='__all__'
+
+
+views.py:
+---------
+from django.shortcuts import render
+from . import forms 
+
+# Create your views here. 
+def student_view(request):
+    form=forms.StudentForm 
+    if request.method=='POST':
+        form=forms.StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+    return render(request,'input.html',{'form':form})
+
+
+
+
+input.html:
+------------
+<!DOCTYPE html> 
+{%load static%} 
+<html lang="en"> 
+<head> 
+<meta charset="utf-8"> 
+<title></title> 
+</head> 
+<body> 
+<h1>Registration Form</h1> 
+<div class="container" align="center"> 
+<form method="post"> 
+{{form.as_p}}
+{% csrf_token %} 
+<input type="submit" class="btn btn-primary" name="" value="Submit"> 
+</form> 
+</div> 
+</body> 
+</html> 
+
+Example:
+---------
+
+movieproject:
+---------------
+create movieApp
+
+models.py:
+---------
+from django.db import models  
+# Create your models here. 
+
+class Movie(models.Model): 
+	rdate=models.DateField() 
+	moviename=models.CharField(max_length=30) 
+	hero=models.CharField(max_length=30) 
+	heroine=models.CharField(max_length=30) 
+	rating=models.IntegerField()
+
+
+admin.py:
+---------
+from django.contrib import admin 
+from movieApp.models import Movie 
+# Register your models here. 
+
+admin.site.register(Movie)
+
+forms.py:
+---------
+from django import forms 
+from .models import Movie 
+class MovieForm(forms.ModelForm): 
+	class Meta: 
+	model=Movie 
+	fields='__all__' 
+
+views.py:
+--------
+from django.shortcuts import render 
+from movieApp.forms import MovieForm 
+from movieApp.models import Movie 
+
+# Create your views here. 
+
+def index_view(request): 
+return render(request,'index.html') 
+ 
+def add_movie_view(request): 
+	form=MovieForm() 
+	if request.method=='POST': 
+		form=MovieForm(request.POST) 
+		if form.is_valid(): 
+			form.save() 
+		return index_view(request) 
+	return render(request,'addmovie.html',{'form':form}) 
+ 
+def list_movie_view(request):
+	movies_list=Movie.objects.all().order_by('-rating') 
+	return render(request,'listmovie.html',{'movies_list':movies_list})
+
+
+urls.py
+-------
+from movieApp imports views
+urlspatterns=[
+   path('',views.index_view),
+   path('addmovie/',views.add_movie_view),
+   path('listmovies/',views.list_movie_view)
+
+]
+
+
+index.html:
+-----------
+
+<!DOCTYPE html> 
+{%load static%} 
+<html lang="en" dir="ltr"> 
+<head> 
+<meta charset="utf-8">
+<title></title> 
+
+<link rel="stylesheet" href="{% static "css/movie.css"%}">
+<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesh
+eet"> 
+</head> 
+<body> 
+<div class="container" align="center"> 
+<div class="jumbotron"> 
+<h1>Prasad Movies...</h1> 
+<p>up to date movies information</p> 
+<a class="btn btn-primary btn-lg" href="/addmovie" role="button">Add Movie</a> 
+<a class="btn btn-primary btn-lg" href="/listmovies" role="button">List Movies</a> 
+</div> 
+</div> 
+</body> 
+</html>
+
+
+listmovie.html:
+---------------
+<!DOCTYPE html> 
+{% load cust_filters %} 
+{%load staticfiles%} 
+<html lang="en" dir="ltr"> 
+<head> 
+<meta charset="utf-8"> 
+<title></title> 
+
+<link rel="stylesheet" href="{% static "css/movie.css"%}"> 
+<link href="https://fonts.googleapis.com/css?family=Merriweather"
+rel="stylesheet"> 
+</head> 
+<body> 
+<h1>Movies Information</h1> 
+{% if movies_list %} 
+<table> 
+<thead> 
+<th>Released Date</th> 
+<th>Movie Name</th> 
+<th>Hero</th> 
+<th>Heroine</th> 
+<th>Rating</th> 
+</thead>
+{% for movie in movies_list%} 
+<tr> 
+<td>{{movie.rdate}}</td> 
+<td>{{movie.moviename}}</td>
+<td>{{movie.hero}}</td> 
+<td>{{movie.heroine}}</td> 
+<td>{{movie.rating}}</td> 
+</tr> 
+{% endfor %} 
+</table> 
+{% else %} 
+<p>No Movies Found</p> 
+{%endif%} 
+</body> 
+</html>
+
+
+addmovie.html:
+---------------
+<!DOCTYPE html> 
+{%load static%} 
+<html lang="en" dir="ltr"> 
+<head> 
+<meta charset="utf-8"> 
+<title></title> 
+ 
+<link rel="stylesheet" href="{% static "css/movie.css"%}"> 
+<link href="https://fonts.googleapis.com/css?family=Merriweather"
+rel="stylesheet"> 
+</head> 
+<body> 
+<div class="container" align='center'> 
+<h1>Add Movie Information</h1><hr> 
+<form method="post"> 
+{{form.as_p}} 
+{%csrf_token%} 
+<input type="submit" class='btn btn-primary' value="Add Movie"> 
+</form> 
+</div> 
+</body> 
+</html>
+
+movie.css
+---------
+body{ 
+background: url(); 
+/* background-repeat: no-repeat;
+ background-size: cover; */ 
+} 
+.container .jumbotron{ 
+margin-top:200px; 
+background: orange; 
+color:white; 
+font-family: 'Merriweather', serif; 
+} 
+table,tr,td,thead,th{ 
+border:2px solid white; 
+font-size: 30px; 
+color:white; 
+background:red; 
+margin:auto; 
+} 
+thead,th{ 
+border:2px solid red; 
+font-size: 30px; 
+color:blue; 
+margin:auto; 
+background:yellow; 
+)} 
+h1{ 
+text-align: center; 
+} 
